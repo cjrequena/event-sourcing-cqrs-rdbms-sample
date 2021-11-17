@@ -1,0 +1,133 @@
+
+
+
+# INFO
+info:
+  service_name: ${spring.application.name}
+  maven_version: ${project.version}
+  git.dirty: ${git.dirty}
+  git.branch: ${git.branch}
+  git.tags: ${git.tags}
+  git.build.time: ${git.build.time}
+  git.build.version: ${git.build.version}
+  git.closest.tag.name: ${git.closest.tag.name}
+  git.commit.time: ${git.commit.time}
+  git.commit.id: ${git.commit.id}
+  git.commit.id.abbrev: ${git.commit.id.abbrev}
+  git.commit.user.name: ${git.commit.user.name}
+  git.commit.user.email: ${git.commit.user.email}
+  git.remote.origin.url: ${git.remote.origin.url}
+
+spring.main.allow-bean-definition-overriding: true # Enable bean override
+
+---
+spring.config.activate.on-profile: local
+# ----------------------------------------
+# ACTUATOR PROPERTIES
+# ----------------------------------------
+# ENDPOINTS WEB CONFIGURATION
+management.endpoints.web.exposure.include: '*' # Endpoint IDs that should be included or '*' for all.
+management.endpoints.web.exposure.exclude:  # Endpoint IDs that should be excluded or '*' for all.
+management.endpoints.web.base-path: /management # Base path for Web endpoints. Relative to server.servlet.context-path or management.server.servlet.context-path if management.server.port is configured.
+management.endpoints.web.path-mapping.health: healthcheck
+
+# HEALTH ENDPOINT
+management.endpoint.health.cache.time-to-live: 0ms # Maximum time that a response can be cached.
+management.endpoint.health.enabled: true # Whether to enable the health endpoint.
+management.endpoint.health.roles:  # Roles used to determine whether or not a user is authorized to be shown details. When empty, all authenticated users are authorized.
+management.endpoint.health.show-details: always # When to show full health details.
+
+# INFO CONTRIBUTORS (InfoContributorProperties)
+management.info.build.enabled: true # Whether to enable build info.
+management.info.defaults.enabled: true # Whether to enable default info contributors.
+management.info.env.enabled: true # Whether to enable environment info.
+management.info.git.enabled: true # Whether to enable git info.
+management.info.git.mode: full # Mode to use to expose git information.
+
+# LOGGING
+logging.config: classpath:log4j2-local.xml # Location of the logging configuration file. For instance, `classpath:logback.xml` for Logback.
+logging.file: log4j2-local.xml # Log file name (for instance, `myapp.log`). Names can be an exact location or relative to the current directory.
+logging.level: # Log levels severity mapping. For instance, `logging.level.org.springframework: DEBUG`.
+  org.springframework: INFO
+  com.cjrequena.sample: DEBUG
+  com.zaxxer.hikari.HikariConfig: INFO
+  org.hibernate.type.descriptor.sql.BasicBinder: ERROR
+  org.flywaydb: INFO
+
+# H2
+spring.datasource.url: jdbc:h2:mem:testdb
+spring.datasource.driverClassName: org.h2.Driver
+spring.datasource.username: sa
+#spring.datasource.password: password
+spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+spring.h2.console.enabled: true
+
+# JPA specific configs
+spring.jpa.open-in-view: false
+#spring.jpa.properties.hibernate.connection.provider_class: org.hibernate.hikaricp.internal.HikariCPConnectionProvider
+spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.properties.hibernate.show_sql: false
+spring.jpa.properties.hibernate.format_sql: true
+spring.jpa.properties.hibernate.use_sql: true
+spring.jpa.properties.hibernate.hibernate.dialect: true
+spring.jpa.properties.hibernate.id.new_generator_mappings: false
+spring.jpa.properties.hibernate.search.autoregister_listeners: false
+spring.jpa.properties.hibernate.bytecode.use_reflection_optimizer: false
+
+# flyway
+spring.flyway:
+  enabled: true
+  #locations: classpath:/db/migration
+  locations: classpath:/db/migration/h2
+
+spring.cloud.stream:
+  defaultBinder: kafka # The default binder to use, if multiple binders are configured. See Multiple Binders on the Classpath.
+spring.cloud.stream.bindings:
+  event_output_channel:
+    destination: event.sourced # The target destination of a channel on the bound middleware (e.g., the RabbitMQ exchange or Kafka topic).
+    content-type: application/json
+    binder: kafka # The binder used by this binding. See Multiple Binders on the Classpath for details.
+  event_input_channel:
+    destination: event.sourced # The target destination of a channel on the bound middleware (e.g., the RabbitMQ exchange or Kafka topic).
+    content-type: application/json
+    binder: kafka # The binder used by this binding. See Multiple Binders on the Classpath for details.
+    group: ${random.uuid} # The consumer group of the channel. Applies only to inbound bindings. See Consumer Groups.
+  command_output_channel:
+    destination: command.sourced # The target destination of a channel on the bound middleware (e.g., the RabbitMQ exchange or Kafka topic).
+    content-type: application/json
+    binder: kafka # The binder used by this binding. See Multiple Binders on the Classpath for details.
+  command_input_channel:
+    destination: command.sourced # The target destination of a channel on the bound middleware (e.g., the RabbitMQ exchange or Kafka topic).
+    content-type: application/json
+    binder: kafka # The binder used by this binding. See Multiple Binders on the Classpath for details.
+    group: commad-group # The consumer group of the channel. Applies only to inbound bindings. See Consumer Groups.
+spring.cloud.stream.kafka.binder:
+  brokers: localhost # A list of brokers to which the Kafka binder will connect.
+  defaultBrokerPort: 9092 # This sets the default port when no port is configured in the broker list
+  zkNodes: localhost # A list of ZooKeeper nodes to which the Kafka binder can connect.
+  defaultZkPort: 2181 # This sets the default port when no port is configured in the node list
+  configuration: # Key/Value map of client properties (both producers and consumer) passed to all clients created by the binder. Due to the fact that these properties will be used by both producers and consumers, usage should be restricted to common properties, especially security settings. Default: Empty map.
+    auto.offset.reset: earliest
+  #headers: #  The list of custom headers that will be transported by the binder. Default: empty.
+  healthTimeout: 10 # The time to wait to get partition information in seconds; default 60. Health will report as down if this timer expires.
+  requiredAcks: 1 # The number of required acks on the broker.
+  minPartitionCount: 1 # Effective only if autoCreateTopics or autoAddPartitions is set
+  replicationFactor: 1 # The replication factor of auto-created topics if autoCreateTopics is active.
+  autoCreateTopics: true # If set to true, the binder will create new topics automatically.
+  autoAddPartitions: true # If set to true, the binder will create add new partitions if required
+
+# swagger configuration
+springdoc:
+  api-docs:
+    groups:
+      enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    display-request-duration: true
+    groups-order: DESC
+  version: '@springdoc.version@'
+
+#
+spring.cloud:
+  loadbalancer.ribbon:
+    enabled: false
