@@ -8,7 +8,7 @@
         <version>2.5.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.cjerequena.sample</groupId>
+    <groupId>com.cjrequena.sample</groupId>
     <artifactId>event-sourcing-cqrs-rdbms-sample</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>event-sourcing-cqrs-rdbms-sample</name>
@@ -66,10 +66,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-        <!--		<dependency>-->
-        <!--			<groupId>org.springframework.boot</groupId>-->
-        <!--			<artifactId>spring-boot-starter-data-r2dbc</artifactId>-->
-        <!--		</dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
@@ -159,11 +155,6 @@
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <!--		<dependency>-->
-        <!--			<groupId>io.r2dbc</groupId>-->
-        <!--			<artifactId>r2dbc-h2</artifactId>-->
-        <!--			<scope>runtime</scope>-->
-        <!--		</dependency>-->
         <!-- Swagger -->
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -188,11 +179,6 @@
             <scope>provided</scope>
         </dependency>
         <!-- Test -->
-        <dependency>
-            <groupId>io.projectreactor</groupId>
-            <artifactId>reactor-test</artifactId>
-            <scope>test</scope>
-        </dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
