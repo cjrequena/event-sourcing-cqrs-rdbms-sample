@@ -225,6 +225,7 @@
 					<showWarnings>false</showWarnings>
 					<showDeprecation>false</showDeprecation>
 					<encoding>${project.build.sourceEncoding}</encoding>
+                     <forceJavacCompilerUse>true</forceJavacCompilerUse>
 				</configuration>
 			</plugin>
 			<!-- -->
