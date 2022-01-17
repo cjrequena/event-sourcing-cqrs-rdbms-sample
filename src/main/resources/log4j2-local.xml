@@ -13,7 +13,7 @@
         <Root level="WARN">
             <AppenderRef ref="Console"/>
         </Root>
-        <Logger name="org.springframework" level="INFO"/>
+        <Logger name="org.springframework" level="ERROR"/>
         <Logger name="com.cjrequena.sample" level="DEBUG"/>
     </Loggers>
 </Configuration>

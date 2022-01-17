@@ -48,7 +48,7 @@ management.info.git.mode: full # Mode to use to expose git information.
 logging.config: classpath:log4j2-local.xml # Location of the logging configuration file. For instance, `classpath:logback.xml` for Logback.
 logging.file: log4j2-local.xml # Log file name (for instance, `myapp.log`). Names can be an exact location or relative to the current directory.
 logging.level: # Log levels severity mapping. For instance, `logging.level.org.springframework: DEBUG`.
-  org.springframework: INFO
+  org.springframework: ERROR
   com.cjrequena.sample: DEBUG
   com.zaxxer.hikari.HikariConfig: INFO
   org.hibernate.type.descriptor.sql.BasicBinder: ERROR
@@ -84,7 +84,7 @@ spring.flyway:
 spring.cloud.stream:
   defaultBinder: kafka # The default binder to use, if multiple binders are configured. See Multiple Binders on the Classpath.
 spring.cloud.stream.bindings:
-  event_output_channel:
+  event-channel-out:
     destination: event.sourced # The target destination of a channel on the bound middleware (e.g., the RabbitMQ exchange or Kafka topic).
     content-type: application/json
     binder: kafka # The binder used by this binding. See Multiple Binders on the Classpath for details.

@@ -1,4 +1,4 @@
-package com.cjrequena.sample.db.repository;
+package com.cjrequena.sample.db.repository.eventstore;
 
 import com.cjrequena.sample.db.entity.eventstore.BankAccountEventEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

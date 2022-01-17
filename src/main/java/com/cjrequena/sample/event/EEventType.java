@@ -14,9 +14,9 @@ import java.util.Arrays;
  */
 public enum EEventType {
 
-  ACCOUNT_CREATED_EVENT("com.cjrequena.samample.accountcreatedevent.v1", ESchemaType.ACCOUNT_CREATED_EVENT_SCHEMA_V1),
-  ACCOUNT_CREDITED_EVENT("com.cjrequena.samample.accountcreditedevent.v1", ESchemaType.ACCOUNT_CREDITED_EVENT_SCHEMA_V1),
-  ACCOUNT_DEBITED_EVENT("com.cjrequena.samample.accountdebitedevent.v1", ESchemaType.ACCOUNT_DEBITED_EVENT_SCHEMA_V1);
+  ACCOUNT_CREATED_EVENT("com.cjrequena.sample.accountcreatedevent.v1", ESchemaType.ACCOUNT_CREATED_EVENT_SCHEMA_V1),
+  ACCOUNT_DEPOSITED_EVENT("com.cjrequena.sample.accountdepositedevent.v1", ESchemaType.ACCOUNT_DEPOSITED_EVENT_SCHEMA_V1),
+  ACCOUNT_WITHDRAWN_EVENT("com.cjrequena.sample.accountdebitedevent.v1", ESchemaType.ACCOUNT_WITHDRAWN_EVENT_SCHEMA_V1);
 
   @JsonValue
   @Getter
