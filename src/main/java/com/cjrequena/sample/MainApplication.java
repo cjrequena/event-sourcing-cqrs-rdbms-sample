@@ -1,18 +1,12 @@
 package com.cjrequena.sample;
 
-
-import com.cjrequena.sample.db.entity.eventstore.AggregateEntity;
-import com.cjrequena.sample.db.entity.eventstore.BankAccountEventEntity;
 import com.cjrequena.sample.db.repository.eventstore.AggregateRepository;
 import com.cjrequena.sample.db.repository.eventstore.BankAccountEventRepository;
-import com.cjrequena.sample.dto.BankAccountDTO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.UUID;
 
 @Log4j2
 @SpringBootApplication
@@ -36,7 +30,7 @@ public class MainApplication implements CommandLineRunner {
 //		aggregateEntity.setVersion(1);
 //		aggregateRepository.save(aggregateEntity);
 //
-//		BankAccountEventEntity entity = new BankAccountEventEntity();
+//		BankAccountCratedEventEntity entity = new BankAccountCratedEventEntity();
 //		entity.setId(UUID.randomUUID());
 //		entity.setAggregateId(aggregateId);
 //		entity.setType("BankAccountCreated");

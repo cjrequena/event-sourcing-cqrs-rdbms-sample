@@ -17,9 +17,8 @@ import java.util.UUID;
  */
 @JsonPropertyOrder(value = {
   "accountId",
+  "amount",
   "version",
-  "amount"
-
 })
 @Schema
 @Data
@@ -28,11 +27,11 @@ public class DepositBankAccountDTO {
   @JsonProperty(value = "account_id")
   private UUID accountId;
 
+  @JsonProperty(value = "amount")
+  private BigDecimal amount;
+
   @NotNull(message = "version is a required field")
   @JsonProperty(value = "version", required = true)
   private int version;
-
-  @JsonProperty(value = "amount")
-  private BigDecimal amount;
 
 }

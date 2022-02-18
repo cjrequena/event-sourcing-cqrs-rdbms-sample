@@ -19,7 +19,7 @@ import java.util.UUID;
  * @author cjrequena
  */
 @Data
-@ToString(callSuper = true, includeFieldNames = true)
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
 public class AccountCreatedEvent extends Event<BankAccountDTO> implements Serializable {
 
@@ -28,20 +28,19 @@ public class AccountCreatedEvent extends Event<BankAccountDTO> implements Serial
 
   @Builder
   public AccountCreatedEvent(
-    @NotBlank String id,
+    @NotBlank @NotNull UUID id,
     @NotBlank String source,
-    @NotBlank String service,
     @NotBlank String specVersion,
-    @NotNull EEventType type,
+    @NotNull @NotNull EEventType type,
     String dataContentType,
     String subject,
     @NotNull OffsetDateTime time,
-    @NotNull BankAccountDTO data,
+    @NotBlank @NotNull BankAccountDTO data,
     String dataBase64,
     ESchemaType dataSchema,
-    @NotBlank UUID aggregateId,
-    @NotBlank int version) {
-    super(id, source, service, specVersion, type, dataContentType, subject, time, data, dataBase64, dataSchema, aggregateId, version);
+    @NotBlank @NotNull UUID aggregateId,
+    @NotBlank @NotNull int version) {
+    super(id, source, specVersion, type, dataContentType, subject, time, data, dataBase64, dataSchema, aggregateId, version);
   }
 
 }

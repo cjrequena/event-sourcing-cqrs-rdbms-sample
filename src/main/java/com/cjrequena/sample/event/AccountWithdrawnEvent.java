@@ -28,7 +28,7 @@ public class AccountWithdrawnEvent extends Event<WithdrawBankAccountDTO> impleme
 
   @Builder
   public AccountWithdrawnEvent(
-    @NotBlank String id,
+    @NotBlank UUID id,
     @NotBlank String source,
     @NotBlank String service,
     @NotBlank String specVersion,
@@ -41,6 +41,6 @@ public class AccountWithdrawnEvent extends Event<WithdrawBankAccountDTO> impleme
     ESchemaType dataSchema,
     @NotBlank UUID aggregateId,
     @NotBlank int version) {
-    super(id, source, service, specVersion, type, dataContentType, subject, time, data, dataBase64, dataSchema, aggregateId, version);
+    super(id, source, specVersion, type, dataContentType, subject, time, data, dataBase64, dataSchema, aggregateId, version);
   }
 }

@@ -16,7 +16,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,6 +34,8 @@ public class BankAccountCommandService {
 
   private ApplicationEventPublisher applicationEventPublisher;
   private BankAccountRepository bankAccountRepository;
+  @Autowired
+  private BankAccountEventStoreService bankAccountEventStoreService;
 
   @Autowired
   public BankAccountCommandService(ApplicationEventPublisher applicationEventPublisher, BankAccountRepository bankAccountRepository) {
@@ -49,23 +50,25 @@ public class BankAccountCommandService {
       case "CreateBankAccountCommand":
         this.process((CreateBankAccountCommand) command);
         break;
-      case "DebitBankAccountCommand":
+      case "WithdrawBankAccountCommand":
         this.process((WithdrawBankAccountCommand) command);
         break;
-      case "CreditBankAccountCommand":
+      case "DepositBankAccountCommand":
         this.process((DepositBankAccountCommand) command);
         break;
     }
   }
 
   @Transactional
-  public void process(CreateBankAccountCommand createBankAccountCommand) {
+  public void process(CreateBankAccountCommand command) {
     AccountCreatedEvent event = AccountCreatedEvent.builder()
       .type(EEventType.ACCOUNT_CREATED_EVENT)
-      .data(createBankAccountCommand.getData())
-      .aggregateId(createBankAccountCommand.getAggregateId())
-      .version(createBankAccountCommand.getVersion())
+      .data(command.getData())
+      .aggregateId(command.getAggregateId())
+      .version(command.getVersion())
       .build();
+
+    bankAccountEventStoreService.appendBankAccountCreatedEvent(event);
 
     KafkaEvent<AccountCreatedEvent> kafkaEvent = new KafkaEvent(event, Constant.EVENT_CHANNEL_OUT);
     kafkaEvent.addHeader("operation", EEventType.ACCOUNT_CREATED_EVENT.getValue());
@@ -74,14 +77,14 @@ public class BankAccountCommandService {
 
   @Transactional
   public void process(DepositBankAccountCommand command) throws BankAccountNotFoundServiceException, AggregateVersionServiceException {
-    this.validateAggregateState(command.getAggregateId(), command.getVersion());
-
     AccountDepositedEvent event = AccountDepositedEvent.builder()
       .type(EEventType.ACCOUNT_DEPOSITED_EVENT)
       .data(command.getData())
       .aggregateId(command.getAggregateId())
       .version(command.getVersion() + 1) // TODO
       .build();
+
+    bankAccountEventStoreService.appendBankAccountDepositedEvent(event);
 
     KafkaEvent<AccountDepositedEvent> kafkaEvent = new KafkaEvent(event, Constant.EVENT_CHANNEL_OUT);
     kafkaEvent.addHeader("operation", EEventType.ACCOUNT_DEPOSITED_EVENT.getValue());
@@ -102,13 +105,6 @@ public class BankAccountCommandService {
     KafkaEvent<AccountDepositedEvent> kafkaEvent = new KafkaEvent(event, Constant.EVENT_CHANNEL_OUT);
     kafkaEvent.addHeader("operation", EEventType.ACCOUNT_WITHDRAWN_EVENT.getValue());
     applicationEventPublisher.publishEvent(kafkaEvent);
-  }
-
-  public void printAccountsInfo() {
-    final List<BankAccountEntity> all = this.bankAccountRepository.findAll();
-    for (BankAccountEntity bankAccountEntity : all) {
-      log.debug("accountId: {} owner: {} balance {}", bankAccountEntity.getAccountId(), bankAccountEntity.getOwner(), bankAccountEntity.getBalance());
-    }
   }
 
   private BankAccountEntity validateAggregateState(UUID aggregateId, int version) throws AggregateVersionServiceException, BankAccountNotFoundServiceException {

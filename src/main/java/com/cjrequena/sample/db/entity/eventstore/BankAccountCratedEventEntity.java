@@ -2,7 +2,7 @@ package com.cjrequena.sample.db.entity.eventstore;
 
 import com.cjrequena.sample.db.converter.BankAccountDataConverter;
 import com.cjrequena.sample.dto.BankAccountDTO;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -15,13 +15,17 @@ import javax.persistence.Table;
  * <p></p>
  * @author cjrequena
  */
+@Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "bank_account_event")
-@Data
-public class BankAccountEventEntity extends EventEntity {
-
+public class BankAccountCratedEventEntity extends EventEntity {
   // Payload
   @Convert(converter = BankAccountDataConverter.class)
   @Column(name = "data", columnDefinition = "JSON")
   protected BankAccountDTO data;
+
 }
