@@ -39,7 +39,7 @@ public class EventEmitter {
 
     streamBridge.send(channel,
       MessageBuilder.withPayload(event)
-        .copyHeaders(kafkaEvent.getHeaders())
+        .copyHeaders(headers)
         .build());
 
     log.debug("event::sourced {}", event.toString());
