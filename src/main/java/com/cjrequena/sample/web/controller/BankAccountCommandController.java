@@ -92,7 +92,7 @@ public class BankAccountCommandController {
     path = "/bank-accounts",
     produces = {APPLICATION_JSON_VALUE}
   )
-  public ResponseEntity<Void> createAccount(@Parameter @Valid @RequestBody BankAccountDTO dto, BindingResult bindingResult, HttpServletRequest request, UriComponentsBuilder ucBuilder) throws NotFoundControllerException, BadRequestControllerException {
+  public ResponseEntity<Void> create(@Parameter @Valid @RequestBody BankAccountDTO dto, BindingResult bindingResult, HttpServletRequest request, UriComponentsBuilder ucBuilder) throws NotFoundControllerException, BadRequestControllerException {
     try {
       CreateBankAccountCommand createBankAccountCommand = CreateBankAccountCommand.builder().bankAccountDTO(dto).build();
       this.bankAccountCommandService.handler(createBankAccountCommand);
@@ -109,8 +109,8 @@ public class BankAccountCommandController {
   }
 
   @Operation(
-    summary = "Command for bank account credit operation ",
-    description = "Command for bank account credit operation ",
+    summary = "Command for bank account deposit operation ",
+    description = "Command for bank account deposit operation ",
     parameters = {
       @Parameter(
         name = "accept-version",
@@ -121,6 +121,15 @@ public class BankAccountCommandController {
           type = "string", allowableValues = {VND_SAMPLE_SERVICE_V1}
         )
       ),
+      @Parameter(
+        name = "aggregate-version",
+        required = true,
+        in = ParameterIn.HEADER,
+        schema = @Schema(
+          name = "aggregate-version",
+          type = "number"
+        )
+      )
     },
     requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = DepositBankAccountDTO.class)))
   )
@@ -154,11 +163,11 @@ public class BankAccountCommandController {
   }
 
   @Operation(
-    summary = "Command for bank account debit operation ",
-    description = "Command for bank account debit operation ",
+    summary = "Command for bank account withdraw operation ",
+    description = "Command for bank account withdraw operation ",
     parameters = {
-      @Parameter(name = "accept-version", required = true, in = ParameterIn.HEADER, schema = @Schema(name = "accept-version", type = "string", allowableValues = {
-        VND_SAMPLE_SERVICE_V1})),
+      @Parameter(name = "accept-version", required = true, in = ParameterIn.HEADER, schema = @Schema(name = "accept-version", type = "string", allowableValues = {VND_SAMPLE_SERVICE_V1})),
+      @Parameter(name = "aggregate-version", required = true, in = ParameterIn.HEADER, schema = @Schema(name = "aggregate-version", type = "number"))
     },
     requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = WithdrawBankAccountDTO.class)))
   )
@@ -174,8 +183,8 @@ public class BankAccountCommandController {
       @ApiResponse(responseCode = "503", description = "Service Unavailable - We are temporarily unable. Please wait for a bit and try again. ")
     }
   )
-  @PostMapping(path = "bank-accounts/debit", produces = {APPLICATION_JSON_VALUE})
-  public ResponseEntity<Void> debitAccount(@RequestBody WithdrawBankAccountDTO dto, BindingResult bindingResult,
+  @PostMapping(path = "/bank-accounts/withdraw", produces = {APPLICATION_JSON_VALUE})
+  public ResponseEntity<Void> withdraw(@RequestBody WithdrawBankAccountDTO dto, BindingResult bindingResult,
     HttpServletRequest request, UriComponentsBuilder ucBuilder) throws NotFoundControllerException, BadRequestControllerException {
     try {
       WithdrawBankAccountCommand command = WithdrawBankAccountCommand.builder().withdrawBankAccountDTO(dto).build();
