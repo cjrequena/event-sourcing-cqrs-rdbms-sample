@@ -2,7 +2,6 @@ package com.cjrequena.sample.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,7 +28,6 @@ import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
   "owner",
   "balance"
 })
-@JsonTypeName("data")
 @Schema
 public class BankAccountDTO implements Serializable {
 

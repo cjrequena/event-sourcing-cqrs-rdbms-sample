@@ -7,7 +7,6 @@ import com.cjrequena.sample.command.WithdrawBankAccountCommand;
 import com.cjrequena.sample.db.entity.eventstore.BankAccountCratedEventEntity;
 import com.cjrequena.sample.db.entity.eventstore.BankAccountDepositedEventEntity;
 import com.cjrequena.sample.db.entity.eventstore.BankAccountWithdrawnEventEntity;
-import com.cjrequena.sample.db.entity.eventstore.EventEntity;
 import com.cjrequena.sample.db.repository.BankAccountRepository;
 import com.cjrequena.sample.event.EEventType;
 import com.cjrequena.sample.exception.service.AggregateVersionServiceException;
@@ -17,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * <p>

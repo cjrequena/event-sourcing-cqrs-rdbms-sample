@@ -1,19 +1,23 @@
 package com.cjrequena.sample.db.entity.eventstore;
 
 import com.cjrequena.sample.event.ESchemaType;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.Hibernate;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.time.OffsetDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Data
 @ToString(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 @MappedSuperclass
 public abstract class EventEntity {
 
@@ -63,4 +67,19 @@ public abstract class EventEntity {
 
   @Column(name = "offset_event")
   protected int offsetEvent;
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
+      return false;
+    EventEntity that = (EventEntity) o;
+    return id != null && Objects.equals(id, that.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return getClass().hashCode();
+  }
 }

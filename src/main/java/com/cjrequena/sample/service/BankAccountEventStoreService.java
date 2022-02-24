@@ -1,9 +1,7 @@
 package com.cjrequena.sample.service;
 
 import com.cjrequena.sample.common.Constant;
-import com.cjrequena.sample.db.entity.BankAccountEntity;
 import com.cjrequena.sample.db.entity.eventstore.AggregateEntity;
-import com.cjrequena.sample.db.entity.eventstore.BankAccountCratedEventEntity;
 import com.cjrequena.sample.db.entity.eventstore.EventEntity;
 import com.cjrequena.sample.db.repository.eventstore.AggregateRepository;
 import com.cjrequena.sample.db.repository.eventstore.BankAccountEventRepository;
