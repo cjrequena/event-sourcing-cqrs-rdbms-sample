@@ -1,6 +1,3 @@
-
-
-
 # INFO
 info:
   service_name: ${spring.application.name}

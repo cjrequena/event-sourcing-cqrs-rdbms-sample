@@ -49,7 +49,6 @@ public class BankAccountCommandService {
     log.debug("Command type: {} Command aggregate_id: {}", command.getCommandType(), command.getAggregateId());
     List<EventEntity> eventEntities = this.bankAccountEventStoreService.retrieveEvents(command.getAggregateId());
 
-
     switch (command.getCommandType()) {
       case "CreateBankAccountCommand":
         this.process((CreateBankAccountCommand) command);

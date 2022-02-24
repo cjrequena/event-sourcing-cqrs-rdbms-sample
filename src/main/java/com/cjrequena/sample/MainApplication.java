@@ -12,33 +12,33 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MainApplication implements CommandLineRunner {
 
-	@Autowired
-	BankAccountEventRepository bankAccountEventRepository;
+  @Autowired
+  BankAccountEventRepository bankAccountEventRepository;
 
-	@Autowired
-	AggregateRepository aggregateRepository;
+  @Autowired
+  AggregateRepository aggregateRepository;
 
-	public static void main(String[] args) {
-		SpringApplication.run(MainApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(MainApplication.class, args);
+  }
 
-	@Override public void run(String... args) throws Exception {
-//		UUID aggregateId = UUID.randomUUID();
-//		AggregateEntity aggregateEntity = new AggregateEntity();
-//		aggregateEntity.setId(aggregateId);
-//		aggregateEntity.setName("BankAccount");
-//		aggregateEntity.setVersion(1);
-//		aggregateRepository.save(aggregateEntity);
-//
-//		BankAccountCratedEventEntity entity = new BankAccountCratedEventEntity();
-//		entity.setId(UUID.randomUUID());
-//		entity.setAggregateId(aggregateId);
-//		entity.setType("BankAccountCreated");
-//		BankAccountDTO data = new BankAccountDTO();
-//		data.setId(aggregateId);
-//		data.setVersion(1);
-//		entity.setData(data);
-//		bankAccountEventRepository.save(entity);
+  @Override public void run(String... args) throws Exception {
+    //		UUID aggregateId = UUID.randomUUID();
+    //		AggregateEntity aggregateEntity = new AggregateEntity();
+    //		aggregateEntity.setId(aggregateId);
+    //		aggregateEntity.setName("BankAccount");
+    //		aggregateEntity.setVersion(1);
+    //		aggregateRepository.save(aggregateEntity);
+    //
+    //		BankAccountCratedEventEntity entity = new BankAccountCratedEventEntity();
+    //		entity.setId(UUID.randomUUID());
+    //		entity.setAggregateId(aggregateId);
+    //		entity.setType("BankAccountCreated");
+    //		BankAccountDTO data = new BankAccountDTO();
+    //		data.setId(aggregateId);
+    //		data.setVersion(1);
+    //		entity.setData(data);
+    //		bankAccountEventRepository.save(entity);
 
-	}
+  }
 }

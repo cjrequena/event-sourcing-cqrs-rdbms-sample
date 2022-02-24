@@ -19,6 +19,6 @@ import java.util.UUID;
 @Repository
 public interface BankAccountEventRepository extends CrudRepository<EventEntity, UUID>, QueryByExampleExecutor<BankAccountCratedEventEntity> {
 
-  @Query(value="SELECT * FROM BANK_ACCOUNT_EVENT WHERE AGGREGATE_ID = ? ORDER BY VERSION ASC", nativeQuery = true)
+  @Query(value = "SELECT * FROM BANK_ACCOUNT_EVENT WHERE AGGREGATE_ID = ? ORDER BY VERSION ASC", nativeQuery = true)
   List<EventEntity> retrieveEvents(UUID aggregateId);
 }

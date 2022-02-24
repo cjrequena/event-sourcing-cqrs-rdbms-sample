@@ -34,7 +34,6 @@ public class JacksonConfiguration {
     return builder;
   }
 
-
   /**
    * Default Jackson
    * @return

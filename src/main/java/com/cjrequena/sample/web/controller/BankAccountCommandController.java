@@ -92,7 +92,8 @@ public class BankAccountCommandController {
     path = "/bank-accounts",
     produces = {APPLICATION_JSON_VALUE}
   )
-  public ResponseEntity<Void> create(@Parameter @Valid @RequestBody BankAccountDTO dto, BindingResult bindingResult, HttpServletRequest request, UriComponentsBuilder ucBuilder) throws NotFoundControllerException, BadRequestControllerException {
+  public ResponseEntity<Void> create(@Parameter @Valid @RequestBody BankAccountDTO dto, BindingResult bindingResult, HttpServletRequest request, UriComponentsBuilder ucBuilder)
+    throws NotFoundControllerException, BadRequestControllerException {
     try {
       CreateBankAccountCommand createBankAccountCommand = CreateBankAccountCommand.builder().bankAccountDTO(dto).build();
       this.bankAccountCommandService.handler(createBankAccountCommand);
@@ -166,7 +167,8 @@ public class BankAccountCommandController {
     summary = "Command for bank account withdraw operation ",
     description = "Command for bank account withdraw operation ",
     parameters = {
-      @Parameter(name = "accept-version", required = true, in = ParameterIn.HEADER, schema = @Schema(name = "accept-version", type = "string", allowableValues = {VND_SAMPLE_SERVICE_V1})),
+      @Parameter(name = "accept-version", required = true, in = ParameterIn.HEADER, schema = @Schema(name = "accept-version", type = "string", allowableValues = {
+        VND_SAMPLE_SERVICE_V1})),
       @Parameter(name = "aggregate-version", required = true, in = ParameterIn.HEADER, schema = @Schema(name = "aggregate-version", type = "number"))
     },
     requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = WithdrawBankAccountDTO.class)))

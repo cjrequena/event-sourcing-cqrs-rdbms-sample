@@ -1,6 +1,7 @@
 package com.cjrequena.sample.db.entity.eventstore;
 
 import com.cjrequena.sample.dto.BankAccountDTO;
+import com.cjrequena.sample.event.ESchemaType;
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,11 +27,15 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue(value="com.cjrequena.sample.accountcreatedevent.v1")
+@DiscriminatorValue(value = "com.cjrequena.sample.accountcreatedevent.v1")
 @TypeDef(
   name = "json", typeClass = JsonType.class
 )
 public class BankAccountCratedEventEntity extends EventEntity {
+
+  // Identifies the schema that data adheres to.
+  @Column(name = "data_schema")
+  protected String dataSchema = ESchemaType.ACCOUNT_CREATED_EVENT_SCHEMA_V1.getValue();
 
   // Payload
   //@Convert(converter = BankAccountDataConverter.class)

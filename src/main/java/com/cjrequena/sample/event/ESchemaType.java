@@ -14,7 +14,9 @@ import java.util.Arrays;
  */
 public enum ESchemaType {
 
-  BANK_ACCOUNT_EVENT_SCHEMA_SPEC_V1("https://schemas.cjrequena.com/bank-account-created/version/1");
+  ACCOUNT_CREATED_EVENT_SCHEMA_V1("https://schemas.cjrequena.com/account-created/version/1"),
+  ACCOUNT_DEPOSITED_EVENT_SCHEMA_V1("https://schemas.cjrequena.com/account-deposited/version/1"),
+  ACCOUNT_WITHDRAWN_EVENT_SCHEMA_V1("https://schemas.cjrequena.com/account-withdrawn/version/1");
 
   @JsonValue
   @Getter

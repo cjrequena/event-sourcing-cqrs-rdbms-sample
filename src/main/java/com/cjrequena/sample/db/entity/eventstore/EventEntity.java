@@ -1,6 +1,5 @@
 package com.cjrequena.sample.db.entity.eventstore;
 
-import com.cjrequena.sample.event.ESchemaType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,9 +17,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @Table(name = "bank_account_event")
-@DiscriminatorColumn(name="type")
+@DiscriminatorColumn(name = "type")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class EventEntity {
+public abstract class EventEntity<T> {
 
   // Unique id for the specific message. This id is globally unique
   @Id
@@ -45,7 +44,7 @@ public abstract class EventEntity {
 
   // Identifies the schema that data adheres to.
   @Column(name = "data_schema")
-  protected String dataSchema = ESchemaType.BANK_ACCOUNT_EVENT_SCHEMA_SPEC_V1.getValue();
+  protected String dataSchema;
 
   // Describes the subject of the event in the context of the event producer (identified by source).
   @Column(name = "subject")
@@ -54,6 +53,10 @@ public abstract class EventEntity {
   // Date and time for when the message was published
   @Column(name = "OFFSET_DATE_TIME")
   protected OffsetDateTime time = OffsetDateTime.now();
+
+  // The event payload.
+  // @Column(name = "data")
+  // protected T data;
 
   // Base64 encoded event payload. Must adhere to RFC4648.
   @Column(name = "data_base64")
