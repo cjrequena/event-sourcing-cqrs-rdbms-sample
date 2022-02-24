@@ -34,7 +34,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import static com.cjrequena.sample.common.Constant.VND_SAMPLE_SERVICE_V1;
+import static com.cjrequena.sample.common.Constants.VND_SAMPLE_SERVICE_V1;
 import static org.apache.http.HttpHeaders.CACHE_CONTROL;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 

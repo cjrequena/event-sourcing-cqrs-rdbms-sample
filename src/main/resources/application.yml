@@ -78,42 +78,6 @@ spring.flyway:
   #locations: classpath:/db/migration
   locations: classpath:/db/migration/h2
 
-spring.cloud.stream:
-  defaultBinder: kafka # The default binder to use, if multiple binders are configured. See Multiple Binders on the Classpath.
-spring.cloud.stream.bindings:
-  event-channel-out:
-    destination: event.sourced # The target destination of a channel on the bound middleware (e.g., the RabbitMQ exchange or Kafka topic).
-    content-type: application/json
-    binder: kafka # The binder used by this binding. See Multiple Binders on the Classpath for details.
-  event_input_channel:
-    destination: event.sourced # The target destination of a channel on the bound middleware (e.g., the RabbitMQ exchange or Kafka topic).
-    content-type: application/json
-    binder: kafka # The binder used by this binding. See Multiple Binders on the Classpath for details.
-    group: ${random.uuid} # The consumer group of the channel. Applies only to inbound bindings. See Consumer Groups.
-  command_output_channel:
-    destination: command.sourced # The target destination of a channel on the bound middleware (e.g., the RabbitMQ exchange or Kafka topic).
-    content-type: application/json
-    binder: kafka # The binder used by this binding. See Multiple Binders on the Classpath for details.
-  command_input_channel:
-    destination: command.sourced # The target destination of a channel on the bound middleware (e.g., the RabbitMQ exchange or Kafka topic).
-    content-type: application/json
-    binder: kafka # The binder used by this binding. See Multiple Binders on the Classpath for details.
-    group: commad-group # The consumer group of the channel. Applies only to inbound bindings. See Consumer Groups.
-spring.cloud.stream.kafka.binder:
-  brokers: localhost # A list of brokers to which the Kafka binder will connect.
-  defaultBrokerPort: 9092 # This sets the default port when no port is configured in the broker list
-  zkNodes: localhost # A list of ZooKeeper nodes to which the Kafka binder can connect.
-  defaultZkPort: 2181 # This sets the default port when no port is configured in the node list
-  configuration: # Key/Value map of client properties (both producers and consumer) passed to all clients created by the binder. Due to the fact that these properties will be used by both producers and consumers, usage should be restricted to common properties, especially security settings. Default: Empty map.
-    auto.offset.reset: earliest
-  #headers: #  The list of custom headers that will be transported by the binder. Default: empty.
-  healthTimeout: 10 # The time to wait to get partition information in seconds; default 60. Health will report as down if this timer expires.
-  requiredAcks: 1 # The number of required acks on the broker.
-  minPartitionCount: 1 # Effective only if autoCreateTopics or autoAddPartitions is set
-  replicationFactor: 1 # The replication factor of auto-created topics if autoCreateTopics is active.
-  autoCreateTopics: true # If set to true, the binder will create new topics automatically.
-  autoAddPartitions: true # If set to true, the binder will create add new partitions if required
-
 # swagger configuration
 springdoc:
   api-docs:

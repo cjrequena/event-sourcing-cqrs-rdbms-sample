@@ -1,5 +1,6 @@
 package com.cjrequena.sample.event;
 
+import com.cjrequena.sample.common.Constants;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
@@ -14,9 +15,9 @@ import java.util.Arrays;
  */
 public enum EEventType {
 
-  ACCOUNT_CREATED_EVENT("com.cjrequena.sample.accountcreatedevent.v1", ESchemaType.ACCOUNT_CREATED_EVENT_SCHEMA_V1),
-  ACCOUNT_DEPOSITED_EVENT("com.cjrequena.sample.accountdepositedevent.v1", ESchemaType.ACCOUNT_DEPOSITED_EVENT_SCHEMA_V1),
-  ACCOUNT_WITHDRAWN_EVENT("com.cjrequena.sample.accountwithdrawnevent.v1", ESchemaType.ACCOUNT_WITHDRAWN_EVENT_SCHEMA_V1);
+  ACCOUNT_CREATED_EVENT_V1(Constants.ACCOUNT_CREATED_EVENT_V1, ESchemaType.ACCOUNT_CREATED_EVENT_SCHEMA_V1),
+  ACCOUNT_DEPOSITED_EVENT_V1(Constants.ACCOUNT_DEPOSITED_EVENT_V1, ESchemaType.ACCOUNT_DEPOSITED_EVENT_SCHEMA_V1),
+  ACCOUNT_WITHDRAWN_EVENT_V1(Constants.ACCOUNT_WITHDRAWN_EVENT_V1, ESchemaType.ACCOUNT_WITHDRAWN_EVENT_SCHEMA_V1);
 
   @JsonValue
   @Getter

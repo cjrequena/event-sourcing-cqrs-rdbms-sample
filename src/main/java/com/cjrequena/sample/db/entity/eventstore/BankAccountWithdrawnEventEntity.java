@@ -1,5 +1,6 @@
 package com.cjrequena.sample.db.entity.eventstore;
 
+import com.cjrequena.sample.common.Constants;
 import com.cjrequena.sample.dto.WithdrawBankAccountDTO;
 import com.cjrequena.sample.event.ESchemaType;
 import com.vladmihalcea.hibernate.type.json.JsonType;
@@ -27,7 +28,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue(value = "com.cjrequena.sample.accountwithdrawnevent.v1")
+@DiscriminatorValue(Constants.ACCOUNT_WITHDRAWN_EVENT_V1)
 @TypeDef(
   name = "json", typeClass = JsonType.class
 )

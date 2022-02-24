@@ -1,5 +1,6 @@
 package com.cjrequena.sample.db.entity.eventstore;
 
+import com.cjrequena.sample.common.Constants;
 import com.cjrequena.sample.dto.BankAccountDTO;
 import com.cjrequena.sample.event.ESchemaType;
 import com.vladmihalcea.hibernate.type.json.JsonType;
@@ -27,7 +28,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue(value = "com.cjrequena.sample.accountcreatedevent.v1")
+@DiscriminatorValue(value = Constants.ACCOUNT_CREATED_EVENT_V1)
 @TypeDef(
   name = "json", typeClass = JsonType.class
 )

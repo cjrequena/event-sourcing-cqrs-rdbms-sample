@@ -1,6 +1,6 @@
 package com.cjrequena.sample.service;
 
-import com.cjrequena.sample.common.Constant;
+import com.cjrequena.sample.common.Constants;
 import com.cjrequena.sample.db.entity.eventstore.AggregateEntity;
 import com.cjrequena.sample.db.entity.eventstore.EventEntity;
 import com.cjrequena.sample.db.repository.eventstore.AggregateRepository;
@@ -41,7 +41,7 @@ public class BankAccountEventStoreService {
     Objects.requireNonNull(event);
     AggregateEntity aggregateEntity = new AggregateEntity();
     aggregateEntity.setId(event.getAggregateId());
-    aggregateEntity.setName(Constant.BANK_ACCOUNT_AGGREGATE_NAME);
+    aggregateEntity.setName(Constants.BANK_ACCOUNT_AGGREGATE_NAME);
     aggregateEntity.setVersion(event.getVersion());
 
     if (this.aggregateRepository.existsByIdAndName(aggregateEntity.getId(), aggregateEntity.getName())) {
