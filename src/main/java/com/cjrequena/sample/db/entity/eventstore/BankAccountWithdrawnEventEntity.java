@@ -11,8 +11,8 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.util.Objects;
 
 /**
@@ -26,7 +26,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "bank_account_event")
+@DiscriminatorValue(value="com.cjrequena.sample.accountwithdrawnevent.v1")
 @TypeDef(
   name = "json", typeClass = JsonType.class
 )

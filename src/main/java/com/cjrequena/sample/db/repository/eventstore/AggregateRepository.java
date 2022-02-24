@@ -20,7 +20,8 @@ public interface AggregateRepository extends CrudRepository<AggregateEntity, UUI
   boolean existsByIdAndName(@Param("id") UUID id, @Param("name") String name);
 
 
-  @Query(value="SELECT CASE WHEN (a.id = :#{#aggregate.id} and a.version = :#{#aggregate.version}) THEN true ELSE false END FROM Aggregate a")
+  //@Query(value="SELECT CASE WHEN (a.id = :#{#aggregate.id} and a.version = :#{#aggregate.version}) THEN true ELSE false END FROM Aggregate a")
+  @Query(value="SELECT CASE WHEN  VERSION = :#{#aggregate.version} THEN True ELSE False END AS TEST FROM AGGREGATE WHERE ID=:#{#aggregate.id}", nativeQuery = true)
   boolean checkAggregateVersion(@Param("aggregate") AggregateEntity aggregateEntity);
 
 }

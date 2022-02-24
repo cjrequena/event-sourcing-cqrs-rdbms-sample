@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.Hibernate;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -18,7 +16,10 @@ import java.util.UUID;
 @ToString(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@MappedSuperclass
+@Entity
+@Table(name = "bank_account_event")
+@DiscriminatorColumn(name="type")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class EventEntity {
 
   // Unique id for the specific message. This id is globally unique
@@ -35,7 +36,7 @@ public abstract class EventEntity {
   protected String specVersion = "1.0";
 
   // Type of message
-  @Column(name = "type")
+  @Column(name = "type", insertable = false, updatable = false)
   protected String type;
 
   // Content type of the data value. Must adhere to RFC 2046 format.
