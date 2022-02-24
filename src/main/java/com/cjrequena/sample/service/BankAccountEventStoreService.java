@@ -1,14 +1,18 @@
 package com.cjrequena.sample.service;
 
 import com.cjrequena.sample.common.Constant;
+import com.cjrequena.sample.db.entity.BankAccountEntity;
 import com.cjrequena.sample.db.entity.eventstore.AggregateEntity;
+import com.cjrequena.sample.db.entity.eventstore.BankAccountCratedEventEntity;
 import com.cjrequena.sample.db.entity.eventstore.EventEntity;
 import com.cjrequena.sample.db.repository.eventstore.AggregateRepository;
 import com.cjrequena.sample.db.repository.eventstore.BankAccountEventRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -34,6 +38,7 @@ public class BankAccountEventStoreService {
     this.aggregateRepository = aggregateRepository;
   }
 
+  @Transactional
   public void appendEvent(EventEntity event) {
     Objects.requireNonNull(event);
     AggregateEntity aggregateEntity = new AggregateEntity();
@@ -45,7 +50,7 @@ public class BankAccountEventStoreService {
       // Check aggregate version.
       if (this.aggregateRepository.checkAggregateVersion(aggregateEntity)) {
         // Increment aggregate version
-        aggregateEntity.setVersion(aggregateEntity.getVersion()+1);
+        aggregateEntity.setVersion(aggregateEntity.getVersion() + 1);
         event.setVersion(aggregateEntity.getVersion());
       } else {
         log.debug(
@@ -60,7 +65,11 @@ public class BankAccountEventStoreService {
     this.aggregateRepository.save(aggregateEntity);
     // Append new Event
     this.bankAccountEventRepository.save(event);
+  }
 
+  @Transactional
+  List<EventEntity> retrieveEvents(UUID aggregateId) {
+    return this.bankAccountEventRepository.retrieveEvents(aggregateId);
   }
 
 }
