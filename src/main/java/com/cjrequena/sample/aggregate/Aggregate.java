@@ -1,6 +1,5 @@
 package com.cjrequena.sample.aggregate;
 
-import com.cjrequena.sample.db.entity.eventstore.EventEntity;
 import com.cjrequena.sample.event.Event;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,14 +23,15 @@ public abstract class Aggregate {
   protected UUID id;
   protected String name;
   protected int version;
-  protected final List<EventEntity> events = new ArrayList<>();
+  protected List<Event> events = new ArrayList<>();
 
   public Aggregate(UUID aggregateId, String aggregateName, List<Event> events) {
     Objects.requireNonNull(aggregateId);
     Objects.requireNonNull(events);
     this.id = aggregateId;
     this.name = aggregateName;
-    replayEvents(events);
+    this.events = events;
+    replayEvents(this.events);
   }
 
   public Aggregate(UUID aggregateId, String aggregateName) {

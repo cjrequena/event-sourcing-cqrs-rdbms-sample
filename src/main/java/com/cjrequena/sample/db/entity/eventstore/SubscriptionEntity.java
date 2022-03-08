@@ -27,11 +27,11 @@ public class SubscriptionEntity {
   @Column(name = "id")
   private UUID id;
 
-  @Column(name = "name")
-  private String name;
+  @Column(name = "consumer_group")
+  private String consumerGroup;
 
   @Column(name = "aggregate_name")
-  private int aggregateName;
+  private String aggregateName;
 
   @Column(name = "offset_event")
   private int offsetEvent;
