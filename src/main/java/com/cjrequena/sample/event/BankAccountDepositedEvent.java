@@ -20,12 +20,11 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class BankAccountDepositedEvent extends Event<DepositBankAccountDTO> implements Serializable {
 
-  // Type of message
   protected EEventType type = EEventType.ACCOUNT_DEPOSITED_EVENT_V1;
+  protected ESchemaType schemaType = ESchemaType.ACCOUNT_DEPOSITED_EVENT_SCHEMA_V1;
 
   @Builder
   public BankAccountDepositedEvent(
-    @NotNull UUID id,
     String source,
     String specVersion,
     String dataContentType,
@@ -33,9 +32,8 @@ public class BankAccountDepositedEvent extends Event<DepositBankAccountDTO> impl
     @NotNull OffsetDateTime time,
     @NotNull DepositBankAccountDTO data,
     String dataBase64,
-    ESchemaType dataSchema,
     @NotNull UUID aggregateId,
     @NotNull int version) {
-    super(id, source, specVersion, EEventType.ACCOUNT_DEPOSITED_EVENT_V1, dataContentType, subject, time, data, dataBase64, dataSchema, aggregateId, version);
+    super(UUID.randomUUID(), source, specVersion, EEventType.ACCOUNT_DEPOSITED_EVENT_V1, dataContentType, subject, time, data, dataBase64, ESchemaType.ACCOUNT_DEPOSITED_EVENT_SCHEMA_V1, aggregateId, version);
   }
 }

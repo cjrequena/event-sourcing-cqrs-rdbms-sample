@@ -24,15 +24,15 @@ public abstract class EventEntity<T> {
   // Unique id for the specific message. This id is globally unique
   @Id
   @Column(name = "id")
-  protected UUID id = UUID.randomUUID();
+  protected UUID id;
 
   // Identifies the context in which an event happened.
   @Column(name = "source")
-  protected String source = "https://event-sourcing-cqrs-sample.sample.cjrequena.com";
+  protected String source;
 
   // The version of the CloudEvents specification which the event uses.
   @Column(name = "spec_version")
-  protected String specVersion = "1.0";
+  protected String specVersion;
 
   // Type of message
   @Column(name = "type", insertable = false, updatable = false)
@@ -40,7 +40,7 @@ public abstract class EventEntity<T> {
 
   // Content type of the data value. Must adhere to RFC 2046 format.
   @Column(name = "data_content_type")
-  protected String dataContentType = "application/json";
+  protected String dataContentType;
 
   // Identifies the schema that data adheres to.
   @Column(name = "data_schema")
@@ -52,7 +52,7 @@ public abstract class EventEntity<T> {
 
   // Date and time for when the message was published
   @Column(name = "OFFSET_DATE_TIME")
-  protected OffsetDateTime time = OffsetDateTime.now();
+  protected OffsetDateTime time;
 
   // The event payload.
   // @Column(name = "data")

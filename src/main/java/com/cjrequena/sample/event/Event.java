@@ -20,7 +20,7 @@ import java.util.UUID;
 public abstract class Event<T> {
 
   // Unique id for the specific message. This id is globally unique
-  protected UUID id = UUID.randomUUID();
+  protected UUID id;
 
   // Identifies the context in which an event happened.
   protected String source = "https://event-sourcing-cqrs-sample.sample.cjrequena.com";

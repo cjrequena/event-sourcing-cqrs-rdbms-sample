@@ -2,7 +2,9 @@ package com.cjrequena.sample.service;
 
 import com.cjrequena.sample.common.Constants;
 import com.cjrequena.sample.db.entity.eventstore.AggregateEntity;
-import com.cjrequena.sample.db.entity.eventstore.EventEntity;
+import com.cjrequena.sample.db.entity.eventstore.BankAccountCratedEventEntity;
+import com.cjrequena.sample.db.entity.eventstore.BankAccountDepositedEventEntity;
+import com.cjrequena.sample.db.entity.eventstore.BankAccountWithdrawnEventEntity;
 import com.cjrequena.sample.db.repository.eventstore.AggregateRepository;
 import com.cjrequena.sample.db.repository.eventstore.BankAccountEventRepository;
 import com.cjrequena.sample.event.BankAccountCratedEvent;
@@ -18,6 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static com.cjrequena.sample.common.Constants.*;
 
 /**
  * <p>
@@ -91,8 +96,21 @@ public class BankAccountEventStoreService {
   }
 
   @Transactional(readOnly = true)
-  List<EventEntity> retrieveEvents(UUID aggregateId) {
-    return this.bankAccountEventRepository.retrieveEvents(aggregateId);
+  List<Event> retrieveEvents(UUID aggregateId) {
+    return this.bankAccountEventRepository.retrieveEvents(aggregateId).stream().map(entity -> {
+      Event event = null;
+      switch (entity.getType()) {
+        case ACCOUNT_CREATED_EVENT_V1:
+          event = this.bankAccountMapper.toEvent((BankAccountCratedEventEntity) entity);
+          break;
+        case ACCOUNT_DEPOSITED_EVENT_V1:
+          event = this.bankAccountMapper.toEvent((BankAccountDepositedEventEntity) entity);
+          break;
+        case ACCOUNT_WITHDRAWN_EVENT_V1:
+          event = this.bankAccountMapper.toEvent((BankAccountWithdrawnEventEntity) entity);
+          break;
+      }
+      return event;
+    }).collect(Collectors.toList());
   }
-
 }

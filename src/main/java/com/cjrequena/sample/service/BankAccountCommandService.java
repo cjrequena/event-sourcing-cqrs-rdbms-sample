@@ -5,10 +5,10 @@ import com.cjrequena.sample.command.Command;
 import com.cjrequena.sample.command.CreateBankAccountCommand;
 import com.cjrequena.sample.command.DepositBankAccountCommand;
 import com.cjrequena.sample.command.WithdrawBankAccountCommand;
-import com.cjrequena.sample.db.entity.eventstore.EventEntity;
 import com.cjrequena.sample.event.BankAccountCratedEvent;
 import com.cjrequena.sample.event.BankAccountDepositedEvent;
 import com.cjrequena.sample.event.BankAccountWithdrawnEvent;
+import com.cjrequena.sample.event.Event;
 import com.cjrequena.sample.exception.service.AggregateVersionServiceException;
 import com.cjrequena.sample.exception.service.BankAccountNotFoundServiceException;
 import com.cjrequena.sample.mapper.BankAccountMapper;
@@ -50,9 +50,9 @@ public class BankAccountCommandService {
   public void handler(Command command) throws BankAccountNotFoundServiceException, AggregateVersionServiceException {
     log.debug("Command type: {} Command aggregate_id: {}", command.getType(), command.getAggregateId());
     // Retrieve the whole event history by a specific aggregate id
-    List<EventEntity> eventEntities = this.bankAccountEventStoreService.retrieveEvents(command.getAggregateId());
+    List<Event> events = this.bankAccountEventStoreService.retrieveEvents(command.getAggregateId());
     // Recreate the last aggregate snapshot replaying the whole event history by a specific aggregate id
-    this.bankAccountAggregate = new BankAccountAggregate(command.getAggregateId(), eventEntities);
+    this.bankAccountAggregate = new BankAccountAggregate(command.getAggregateId(), events);
 
     switch (command.getType()) {
       case CREATE_BANK_ACCOUNT_COMMAND:

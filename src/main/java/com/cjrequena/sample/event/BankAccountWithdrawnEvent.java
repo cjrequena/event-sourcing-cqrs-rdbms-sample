@@ -1,7 +1,10 @@
 package com.cjrequena.sample.event;
 
 import com.cjrequena.sample.dto.WithdrawBankAccountDTO;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -16,16 +19,14 @@ import java.util.UUID;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString(callSuper = true)
 public class BankAccountWithdrawnEvent extends Event<WithdrawBankAccountDTO> implements Serializable {
 
-  // Type of message
-  protected EEventType type = EEventType.ACCOUNT_WITHDRAWN_EVENT_V1;
+  private static final EEventType type = EEventType.ACCOUNT_WITHDRAWN_EVENT_V1;
+  protected static final ESchemaType schemaType = ESchemaType.ACCOUNT_WITHDRAWN_EVENT_SCHEMA_V1;
 
   @Builder
   public BankAccountWithdrawnEvent(
-    @NotNull UUID id,
     String source,
     String specVersion,
     String dataContentType,
@@ -33,9 +34,8 @@ public class BankAccountWithdrawnEvent extends Event<WithdrawBankAccountDTO> imp
     @NotNull OffsetDateTime time,
     @NotNull WithdrawBankAccountDTO data,
     String dataBase64,
-    ESchemaType dataSchema,
     @NotNull UUID aggregateId,
     @NotNull int version) {
-    super(id, source, specVersion, EEventType.ACCOUNT_WITHDRAWN_EVENT_V1, dataContentType, subject, time, data, dataBase64, dataSchema, aggregateId, version);
+    super(UUID.randomUUID(), source, specVersion, type, dataContentType, subject, time, data, dataBase64, schemaType, aggregateId, version);
   }
 }

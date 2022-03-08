@@ -1,10 +1,10 @@
 package com.cjrequena.sample.aggregate;
 
-import com.cjrequena.sample.db.entity.eventstore.BankAccountCratedEventEntity;
-import com.cjrequena.sample.db.entity.eventstore.BankAccountDepositedEventEntity;
-import com.cjrequena.sample.db.entity.eventstore.BankAccountWithdrawnEventEntity;
-import com.cjrequena.sample.db.entity.eventstore.EventEntity;
 import com.cjrequena.sample.dto.BankAccountDTO;
+import com.cjrequena.sample.event.BankAccountCratedEvent;
+import com.cjrequena.sample.event.BankAccountDepositedEvent;
+import com.cjrequena.sample.event.BankAccountWithdrawnEvent;
+import com.cjrequena.sample.event.Event;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.UUID;
 
-import static com.cjrequena.sample.common.Constants.*;
+import static com.cjrequena.sample.common.Constants.BANK_ACCOUNT_AGGREGATE_NAME;
 
 @Data
 @ToString(callSuper = true)
@@ -25,30 +25,30 @@ public class BankAccountAggregate extends Aggregate {
 
   private BankAccountDTO bankAccountDTO;
 
-  public BankAccountAggregate(UUID aggregateId, List<EventEntity> events) {
+  public BankAccountAggregate(UUID aggregateId, List<Event> events) {
     super(aggregateId, BANK_ACCOUNT_AGGREGATE_NAME, events);
   }
 
   @Override
-  public void replayEvents(List<EventEntity> events) {
+  public void replayEvents(List<Event> events) {
     events.forEach(
       event -> {
         switch (event.getType()) {
           case ACCOUNT_CREATED_EVENT_V1:
-            this.apply((BankAccountCratedEventEntity) event);
+            this.apply((BankAccountCratedEvent) event);
             break;
           case ACCOUNT_DEPOSITED_EVENT_V1:
-            this.apply((BankAccountDepositedEventEntity) event);
+            this.apply((BankAccountDepositedEvent) event);
             break;
           case ACCOUNT_WITHDRAWN_EVENT_V1:
-            this.apply((BankAccountWithdrawnEventEntity) event);
+            this.apply((BankAccountWithdrawnEvent) event);
             break;
         }
         version = event.getVersion();
       });
   }
 
-  public void apply(BankAccountCratedEventEntity event) {
+  public void apply(BankAccountCratedEvent event) {
     this.bankAccountDTO = new BankAccountDTO();
     this.bankAccountDTO.setId(event.getData().getId());
     this.bankAccountDTO.setOwner(event.getData().getOwner());
@@ -57,11 +57,11 @@ public class BankAccountAggregate extends Aggregate {
     this.bankAccountDTO.setBalance(event.getData().getBalance());
   }
 
-  public void apply(BankAccountDepositedEventEntity event) {
+  public void apply(BankAccountDepositedEvent event) {
     this.bankAccountDTO.setBalance(this.bankAccountDTO.getBalance().add(event.getData().getAmount()));
   }
 
-  public void apply(BankAccountWithdrawnEventEntity event) {
+  public void apply(BankAccountWithdrawnEvent event) {
     this.bankAccountDTO.setBalance(this.bankAccountDTO.getBalance().subtract(event.getData().getAmount()));
   }
 }
