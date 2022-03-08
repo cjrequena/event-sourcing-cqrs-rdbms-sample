@@ -36,12 +36,10 @@ public class BankAccountCommandService {
 
   private ApplicationEventPublisher applicationEventPublisher;
   private BankAccountEventStoreService bankAccountEventStoreService;
-  private BankAccountAggregate bankAccountAggregate;
   private BankAccountMapper bankAccountMapper;
 
   @Autowired
-  public BankAccountCommandService(ApplicationEventPublisher applicationEventPublisher, BankAccountEventStoreService bankAccountEventStoreService,
-    BankAccountMapper bankAccountMapper) {
+  public BankAccountCommandService(ApplicationEventPublisher applicationEventPublisher, BankAccountEventStoreService bankAccountEventStoreService, BankAccountMapper bankAccountMapper) {
     this.applicationEventPublisher = applicationEventPublisher;
     this.bankAccountEventStoreService = bankAccountEventStoreService;
     this.bankAccountMapper = bankAccountMapper;
@@ -53,7 +51,7 @@ public class BankAccountCommandService {
     // Retrieve the whole event history by a specific aggregate id
     List<Event> events = this.bankAccountEventStoreService.retrieveEvents(command.getAggregateId());
     // Recreate the last aggregate snapshot replaying the whole event history by a specific aggregate id
-    this.bankAccountAggregate = new BankAccountAggregate(command.getAggregateId(), events);
+    BankAccountAggregate bankAccountAggregate = new BankAccountAggregate(command.getAggregateId(), events);
 
     switch (command.getType()) {
       case CREATE_BANK_ACCOUNT_COMMAND:
