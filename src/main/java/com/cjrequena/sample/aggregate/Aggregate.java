@@ -1,4 +1,4 @@
-package com.cjrequena.sample.event;
+package com.cjrequena.sample.aggregate;
 
 import com.cjrequena.sample.db.entity.eventstore.EventEntity;
 import lombok.Data;

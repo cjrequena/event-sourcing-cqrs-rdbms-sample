@@ -70,7 +70,7 @@ public abstract class EventEntity<T> {
   protected int version;
 
   @Column(name = "offset_event")
-  protected int offsetEvent;
+  protected Integer offsetEvent;
 
   @Override
   public boolean equals(Object o) {

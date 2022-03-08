@@ -1,4 +1,4 @@
-package com.cjrequena.sample.event;
+package com.cjrequena.sample.aggregate;
 
 import com.cjrequena.sample.db.entity.eventstore.BankAccountCratedEventEntity;
 import com.cjrequena.sample.db.entity.eventstore.BankAccountDepositedEventEntity;
@@ -46,7 +46,6 @@ public class BankAccountAggregate extends Aggregate {
         }
         version = event.getVersion();
       });
-    log.debug("");
   }
 
   public void apply(BankAccountCratedEventEntity event) {

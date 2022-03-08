@@ -1,17 +1,17 @@
 package com.cjrequena.sample.service;
 
+import com.cjrequena.sample.aggregate.BankAccountAggregate;
 import com.cjrequena.sample.command.Command;
 import com.cjrequena.sample.command.CreateBankAccountCommand;
 import com.cjrequena.sample.command.DepositBankAccountCommand;
 import com.cjrequena.sample.command.WithdrawBankAccountCommand;
-import com.cjrequena.sample.db.entity.eventstore.BankAccountCratedEventEntity;
-import com.cjrequena.sample.db.entity.eventstore.BankAccountDepositedEventEntity;
-import com.cjrequena.sample.db.entity.eventstore.BankAccountWithdrawnEventEntity;
 import com.cjrequena.sample.db.entity.eventstore.EventEntity;
-import com.cjrequena.sample.event.BankAccountAggregate;
-import com.cjrequena.sample.event.EEventType;
+import com.cjrequena.sample.event.BankAccountCratedEvent;
+import com.cjrequena.sample.event.BankAccountDepositedEvent;
+import com.cjrequena.sample.event.BankAccountWithdrawnEvent;
 import com.cjrequena.sample.exception.service.AggregateVersionServiceException;
 import com.cjrequena.sample.exception.service.BankAccountNotFoundServiceException;
+import com.cjrequena.sample.mapper.BankAccountMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -35,30 +35,33 @@ public class BankAccountCommandService {
 
   private ApplicationEventPublisher applicationEventPublisher;
   private BankAccountEventStoreService bankAccountEventStoreService;
-  private BankAccountAggregate aggregate;
+  private BankAccountAggregate bankAccountAggregate;
+  private BankAccountMapper bankAccountMapper;
 
   @Autowired
-  public BankAccountCommandService(ApplicationEventPublisher applicationEventPublisher,  BankAccountEventStoreService bankAccountEventStoreService) {
+  public BankAccountCommandService(ApplicationEventPublisher applicationEventPublisher, BankAccountEventStoreService bankAccountEventStoreService,
+    BankAccountMapper bankAccountMapper) {
     this.applicationEventPublisher = applicationEventPublisher;
     this.bankAccountEventStoreService = bankAccountEventStoreService;
+    this.bankAccountMapper = bankAccountMapper;
   }
 
   @Transactional
   public void handler(Command command) throws BankAccountNotFoundServiceException, AggregateVersionServiceException {
-    log.debug("Command type: {} Command aggregate_id: {}", command.getCommandType(), command.getAggregateId());
+    log.debug("Command type: {} Command aggregate_id: {}", command.getType(), command.getAggregateId());
     // Retrieve the whole event history by a specific aggregate id
     List<EventEntity> eventEntities = this.bankAccountEventStoreService.retrieveEvents(command.getAggregateId());
     // Recreate the last aggregate snapshot replaying the whole event history by a specific aggregate id
-    this.aggregate = new BankAccountAggregate(command.getAggregateId(), eventEntities);
+    this.bankAccountAggregate = new BankAccountAggregate(command.getAggregateId(), eventEntities);
 
-    switch (command.getCommandType()) {
-      case "CreateBankAccountCommand":
+    switch (command.getType()) {
+      case CREATE_BANK_ACCOUNT_COMMAND:
         this.process((CreateBankAccountCommand) command);
         break;
-      case "WithdrawBankAccountCommand":
+      case WITHDRAW_BANK_ACCOUNT_COMMAND:
         this.process((WithdrawBankAccountCommand) command);
         break;
-      case "DepositBankAccountCommand":
+      case DEPOSIT_BANK_ACCOUNT_COMMAND:
         this.process((DepositBankAccountCommand) command);
         break;
     }
@@ -66,31 +69,19 @@ public class BankAccountCommandService {
 
   @Transactional
   public void process(CreateBankAccountCommand command) {
-    BankAccountCratedEventEntity eventEntity = new BankAccountCratedEventEntity();
-    eventEntity.setType(EEventType.ACCOUNT_CREATED_EVENT_V1.getValue());
-    eventEntity.setData(command.getData());
-    eventEntity.setAggregateId(command.getAggregateId());
-    eventEntity.setVersion(command.getVersion());
-    bankAccountEventStoreService.appendEvent(eventEntity);
+    BankAccountCratedEvent event = this.bankAccountMapper.toEvent(command);
+    bankAccountEventStoreService.appendEvent(event);
   }
 
   @Transactional
   public void process(DepositBankAccountCommand command) throws BankAccountNotFoundServiceException, AggregateVersionServiceException {
-    BankAccountDepositedEventEntity eventEntity = new BankAccountDepositedEventEntity();
-    eventEntity.setType(EEventType.ACCOUNT_DEPOSITED_EVENT_V1.getValue());
-    eventEntity.setData(command.getData());
-    eventEntity.setAggregateId(command.getAggregateId());
-    eventEntity.setVersion(command.getVersion());
-    bankAccountEventStoreService.appendEvent(eventEntity);
+    BankAccountDepositedEvent event = this.bankAccountMapper.toEvent(command);
+    bankAccountEventStoreService.appendEvent(event);
   }
 
   @Transactional
   public void process(WithdrawBankAccountCommand command) throws BankAccountNotFoundServiceException, AggregateVersionServiceException {
-    BankAccountWithdrawnEventEntity eventEntity = new BankAccountWithdrawnEventEntity();
-    eventEntity.setType(EEventType.ACCOUNT_WITHDRAWN_EVENT_V1.getValue());
-    eventEntity.setData(command.getData());
-    eventEntity.setAggregateId(command.getAggregateId());
-    eventEntity.setVersion(command.getVersion());
-    bankAccountEventStoreService.appendEvent(eventEntity);
+    BankAccountWithdrawnEvent event = this.bankAccountMapper.toEvent(command);
+    bankAccountEventStoreService.appendEvent(event);
   }
 }

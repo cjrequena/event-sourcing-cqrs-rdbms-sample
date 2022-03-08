@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
@@ -28,15 +27,16 @@ import java.util.UUID;
 @JsonNaming(PropertyNamingStrategy.LowerCaseStrategy.class)
 public abstract class Command<T> {
 
-  @NotBlank
+  @NotNull
   protected UUID aggregateId;
-  @NotBlank
-  protected int version;
+
+  @NotNull
+  protected ECommandType type;
+
   @NotNull
   protected T data;
 
-  public String getCommandType() {
-    return this.getClass().getSimpleName();
-  }
+  @NotNull
+  protected Integer version;
 
 }
