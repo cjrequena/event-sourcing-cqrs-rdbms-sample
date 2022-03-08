@@ -34,13 +34,13 @@ public class BankAccountAggregate extends Aggregate {
     events.forEach(
       event -> {
         switch (event.getType()) {
-          case ACCOUNT_CREATED_EVENT_V1:
+          case BANK_ACCOUNT_CREATED_EVENT_V1:
             this.apply((BankAccountCratedEvent) event);
             break;
-          case ACCOUNT_DEPOSITED_EVENT_V1:
+          case BANK_ACCOUNT_DEPOSITED_EVENT_V1:
             this.apply((BankAccountDepositedEvent) event);
             break;
-          case ACCOUNT_WITHDRAWN_EVENT_V1:
+          case BANK_ACCOUNT_WITHDRAWN_EVENT_V1:
             this.apply((BankAccountWithdrawnEvent) event);
             break;
         }
@@ -53,7 +53,6 @@ public class BankAccountAggregate extends Aggregate {
     this.bankAccountDTO.setId(event.getData().getId());
     this.bankAccountDTO.setOwner(event.getData().getOwner());
     this.bankAccountDTO.setOwner(event.getData().getOwner());
-    this.bankAccountDTO.setVersion(event.getData().getVersion());
     this.bankAccountDTO.setBalance(event.getData().getBalance());
   }
 

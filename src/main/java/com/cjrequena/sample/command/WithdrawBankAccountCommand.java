@@ -20,7 +20,7 @@ import java.io.Serializable;
 public class WithdrawBankAccountCommand extends Command<WithdrawBankAccountDTO> implements Serializable {
 
   @Builder
-  public WithdrawBankAccountCommand(WithdrawBankAccountDTO withdrawBankAccountDTO) {
-    super(withdrawBankAccountDTO.getAccountId(), ECommandType.WITHDRAW_BANK_ACCOUNT_COMMAND, withdrawBankAccountDTO, withdrawBankAccountDTO.getVersion());
+  public WithdrawBankAccountCommand(WithdrawBankAccountDTO withdrawBankAccountDTO, Integer version) {
+    super(withdrawBankAccountDTO.getAccountId(), ECommandType.WITHDRAW_BANK_ACCOUNT_COMMAND, withdrawBankAccountDTO, version);
   }
 }

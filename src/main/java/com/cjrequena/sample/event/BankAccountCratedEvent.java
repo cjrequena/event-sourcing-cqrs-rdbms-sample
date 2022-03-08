@@ -20,8 +20,8 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class BankAccountCratedEvent extends Event<BankAccountDTO> implements Serializable {
 
-  protected EEventType type = EEventType.ACCOUNT_CREATED_EVENT_V1;
-  protected ESchemaType schemaType = ESchemaType.ACCOUNT_CREATED_EVENT_SCHEMA_V1;
+  protected EEventType type = EEventType.BANK_ACCOUNT_CREATED_EVENT_V1;
+  protected ESchemaType schemaType = ESchemaType.BANK_ACCOUNT_CREATED_EVENT_SCHEMA_V1;
 
   @Builder
   public BankAccountCratedEvent(
@@ -34,6 +34,6 @@ public class BankAccountCratedEvent extends Event<BankAccountDTO> implements Ser
     String dataBase64,
     @NotNull UUID aggregateId,
     @NotNull int version) {
-    super(UUID.randomUUID(), source, specVersion, EEventType.ACCOUNT_CREATED_EVENT_V1, dataContentType, subject, time, data, dataBase64, ESchemaType.ACCOUNT_CREATED_EVENT_SCHEMA_V1, aggregateId, version);
+    super(UUID.randomUUID(), source, specVersion, EEventType.BANK_ACCOUNT_CREATED_EVENT_V1, dataContentType, subject, time, data, dataBase64, ESchemaType.BANK_ACCOUNT_CREATED_EVENT_SCHEMA_V1, aggregateId, version);
   }
 }

@@ -12,4 +12,8 @@ public class NotFoundControllerException extends ControllerException {
   public NotFoundControllerException() {
     super(HttpStatus.NOT_FOUND);
   }
+
+  public NotFoundControllerException(String message) {
+    super(HttpStatus.NOT_FOUND, message);
+  }
 }

@@ -28,7 +28,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue(Constants.ACCOUNT_DEPOSITED_EVENT_V1)
+@DiscriminatorValue(Constants.BANK_ACCOUNT_DEPOSITED_EVENT_V1)
 @TypeDef(
   name = "json", typeClass = JsonType.class
 )
@@ -36,10 +36,9 @@ public class BankAccountDepositedEventEntity extends EventEntity {
 
   // Identifies the schema that data adheres to.
   @Column(name = "data_schema")
-  protected String dataSchema = ESchemaType.ACCOUNT_DEPOSITED_EVENT_SCHEMA_V1.getValue();
+  protected String dataSchema = ESchemaType.BANK_ACCOUNT_DEPOSITED_EVENT_SCHEMA_V1.getValue();
 
   // Payload
-  //@Convert(converter = DepositBankAccountDataConverter.class)
   @Type(type = "json")
   @Column(name = "data", columnDefinition = "JSON")
   protected DepositBankAccountDTO data;

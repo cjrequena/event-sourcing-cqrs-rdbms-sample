@@ -20,7 +20,7 @@ import java.io.Serializable;
 public class DepositBankAccountCommand extends Command<DepositBankAccountDTO> implements Serializable {
 
   @Builder
-  public DepositBankAccountCommand(DepositBankAccountDTO depositBankAccountDTO) {
-    super(depositBankAccountDTO.getAccountId(), ECommandType.DEPOSIT_BANK_ACCOUNT_COMMAND, depositBankAccountDTO, depositBankAccountDTO.getVersion());
+  public DepositBankAccountCommand(DepositBankAccountDTO depositBankAccountDTO, Integer version) {
+    super(depositBankAccountDTO.getAccountId(), ECommandType.DEPOSIT_BANK_ACCOUNT_COMMAND, depositBankAccountDTO, version);
   }
 }

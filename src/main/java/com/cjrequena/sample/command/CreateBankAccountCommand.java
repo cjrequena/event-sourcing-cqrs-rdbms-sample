@@ -24,6 +24,5 @@ public class CreateBankAccountCommand extends Command<BankAccountDTO> implements
   public CreateBankAccountCommand(BankAccountDTO bankAccountDTO) {
     super(UUID.randomUUID(), ECommandType.CREATE_BANK_ACCOUNT_COMMAND, bankAccountDTO, 1);
     bankAccountDTO.setId(super.aggregateId);
-    bankAccountDTO.setVersion(super.version);
   }
 }

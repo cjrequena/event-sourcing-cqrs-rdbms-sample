@@ -9,8 +9,9 @@ import com.cjrequena.sample.event.BankAccountCratedEvent;
 import com.cjrequena.sample.event.BankAccountDepositedEvent;
 import com.cjrequena.sample.event.BankAccountWithdrawnEvent;
 import com.cjrequena.sample.event.Event;
-import com.cjrequena.sample.exception.service.AggregateVersionServiceException;
-import com.cjrequena.sample.exception.service.BankAccountNotFoundServiceException;
+import com.cjrequena.sample.exception.service.AggregateNotFoundServiceException;
+import com.cjrequena.sample.exception.service.DuplicatedAggregateServiceException;
+import com.cjrequena.sample.exception.service.OptimisticConcurrencyAggregateVersionServiceException;
 import com.cjrequena.sample.mapper.BankAccountMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class BankAccountCommandService {
   }
 
   @Transactional
-  public void handler(Command command) throws BankAccountNotFoundServiceException, AggregateVersionServiceException {
+  public void handler(Command command) throws AggregateNotFoundServiceException, OptimisticConcurrencyAggregateVersionServiceException, DuplicatedAggregateServiceException {
     log.debug("Command type: {} Command aggregate_id: {}", command.getType(), command.getAggregateId());
     // Retrieve the whole event history by a specific aggregate id
     List<Event> events = this.bankAccountEventStoreService.retrieveEvents(command.getAggregateId());
@@ -68,19 +69,23 @@ public class BankAccountCommandService {
   }
 
   @Transactional
-  public void process(CreateBankAccountCommand command) {
+  public void process(CreateBankAccountCommand command)
+    throws OptimisticConcurrencyAggregateVersionServiceException, DuplicatedAggregateServiceException, AggregateNotFoundServiceException {
     BankAccountCratedEvent event = this.bankAccountMapper.toEvent(command);
     bankAccountEventStoreService.appendEvent(event);
   }
 
   @Transactional
-  public void process(DepositBankAccountCommand command) throws BankAccountNotFoundServiceException, AggregateVersionServiceException {
+  public void process(DepositBankAccountCommand command)
+    throws OptimisticConcurrencyAggregateVersionServiceException, DuplicatedAggregateServiceException, AggregateNotFoundServiceException {
+
     BankAccountDepositedEvent event = this.bankAccountMapper.toEvent(command);
     bankAccountEventStoreService.appendEvent(event);
   }
 
   @Transactional
-  public void process(WithdrawBankAccountCommand command) throws BankAccountNotFoundServiceException, AggregateVersionServiceException {
+  public void process(WithdrawBankAccountCommand command)
+    throws OptimisticConcurrencyAggregateVersionServiceException, DuplicatedAggregateServiceException, AggregateNotFoundServiceException {
     BankAccountWithdrawnEvent event = this.bankAccountMapper.toEvent(command);
     bankAccountEventStoreService.appendEvent(event);
   }

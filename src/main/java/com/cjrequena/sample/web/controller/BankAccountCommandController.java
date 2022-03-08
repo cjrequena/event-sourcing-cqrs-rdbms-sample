@@ -7,9 +7,11 @@ import com.cjrequena.sample.dto.BankAccountDTO;
 import com.cjrequena.sample.dto.DepositBankAccountDTO;
 import com.cjrequena.sample.dto.WithdrawBankAccountDTO;
 import com.cjrequena.sample.exception.controller.BadRequestControllerException;
+import com.cjrequena.sample.exception.controller.ConflictControllerException;
 import com.cjrequena.sample.exception.controller.NotFoundControllerException;
-import com.cjrequena.sample.exception.service.AggregateVersionServiceException;
-import com.cjrequena.sample.exception.service.BankAccountNotFoundServiceException;
+import com.cjrequena.sample.exception.service.AggregateNotFoundServiceException;
+import com.cjrequena.sample.exception.service.DuplicatedAggregateServiceException;
+import com.cjrequena.sample.exception.service.OptimisticConcurrencyAggregateVersionServiceException;
 import com.cjrequena.sample.service.BankAccountCommandService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -25,10 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -93,7 +92,7 @@ public class BankAccountCommandController {
     produces = {APPLICATION_JSON_VALUE}
   )
   public ResponseEntity<Void> create(@Parameter @Valid @RequestBody BankAccountDTO dto, BindingResult bindingResult, HttpServletRequest request, UriComponentsBuilder ucBuilder)
-    throws NotFoundControllerException, BadRequestControllerException {
+    throws NotFoundControllerException, BadRequestControllerException, ConflictControllerException {
     try {
       CreateBankAccountCommand createBankAccountCommand = CreateBankAccountCommand.builder().bankAccountDTO(dto).build();
       this.bankAccountCommandService.handler(createBankAccountCommand);
@@ -102,9 +101,11 @@ public class BankAccountCommandController {
       headers.set(CACHE_CONTROL, "no store, private, max-age=0");
       headers.set("account-id", createBankAccountCommand.getData().getId().toString());
       return new ResponseEntity<>(headers, HttpStatus.ACCEPTED);
-    } catch (BankAccountNotFoundServiceException ex) {
-      throw new NotFoundControllerException();
-    } catch (AggregateVersionServiceException ex) {
+    }catch (DuplicatedAggregateServiceException ex) {
+      throw new ConflictControllerException(ex.getMessage());
+    } catch (AggregateNotFoundServiceException ex) {
+      throw new NotFoundControllerException(ex.getMessage());
+    } catch (OptimisticConcurrencyAggregateVersionServiceException ex) {
       throw new BadRequestControllerException(ex.getMessage());
     }
   }
@@ -147,18 +148,20 @@ public class BankAccountCommandController {
     }
   )
   @PostMapping(path = "/bank-accounts/deposit", produces = {APPLICATION_JSON_VALUE})
-  public ResponseEntity<Void> deposit(@RequestBody DepositBankAccountDTO dto, BindingResult bindingResult,
-    HttpServletRequest request, UriComponentsBuilder ucBuilder) throws NotFoundControllerException, BadRequestControllerException {
+  public ResponseEntity<Void> deposit(@RequestBody DepositBankAccountDTO dto, @RequestHeader("aggregate-version") Integer aggregateVersion, HttpServletRequest request, BindingResult bindingResult, UriComponentsBuilder ucBuilder)
+    throws NotFoundControllerException, BadRequestControllerException, ConflictControllerException {
     try {
-      DepositBankAccountCommand command = DepositBankAccountCommand.builder().depositBankAccountDTO(dto).build();
+      DepositBankAccountCommand command = DepositBankAccountCommand.builder().depositBankAccountDTO(dto).version(aggregateVersion).build();
       this.bankAccountCommandService.handler(command);
       // Headers
       HttpHeaders headers = new HttpHeaders();
       headers.set(CACHE_CONTROL, "no store, private, max-age=0");
       return new ResponseEntity<>(headers, HttpStatus.ACCEPTED);
-    } catch (BankAccountNotFoundServiceException ex) {
-      throw new NotFoundControllerException();
-    } catch (AggregateVersionServiceException ex) {
+    } catch (DuplicatedAggregateServiceException ex) {
+      throw new ConflictControllerException(ex.getMessage());
+    }catch (AggregateNotFoundServiceException ex) {
+      throw new NotFoundControllerException(ex.getMessage());
+    } catch (OptimisticConcurrencyAggregateVersionServiceException ex) {
       throw new BadRequestControllerException(ex.getMessage());
     }
   }
@@ -186,18 +189,20 @@ public class BankAccountCommandController {
     }
   )
   @PostMapping(path = "/bank-accounts/withdraw", produces = {APPLICATION_JSON_VALUE})
-  public ResponseEntity<Void> withdraw(@RequestBody WithdrawBankAccountDTO dto, BindingResult bindingResult,
-    HttpServletRequest request, UriComponentsBuilder ucBuilder) throws NotFoundControllerException, BadRequestControllerException {
+  public ResponseEntity<Void> withdraw(@RequestBody WithdrawBankAccountDTO dto, @RequestHeader("aggregate-version") Integer aggregateVersion, HttpServletRequest request, BindingResult bindingResult,UriComponentsBuilder ucBuilder)
+    throws NotFoundControllerException, BadRequestControllerException, ConflictControllerException {
     try {
-      WithdrawBankAccountCommand command = WithdrawBankAccountCommand.builder().withdrawBankAccountDTO(dto).build();
+      WithdrawBankAccountCommand command = WithdrawBankAccountCommand.builder().withdrawBankAccountDTO(dto).version(aggregateVersion).build();
       this.bankAccountCommandService.handler(command);
       // Headers
       HttpHeaders headers = new HttpHeaders();
       headers.set(CACHE_CONTROL, "no store, private, max-age=0");
       return new ResponseEntity<>(headers, HttpStatus.ACCEPTED);
-    } catch (BankAccountNotFoundServiceException ex) {
-      throw new NotFoundControllerException();
-    } catch (AggregateVersionServiceException ex) {
+    } catch (DuplicatedAggregateServiceException ex) {
+      throw new ConflictControllerException(ex.getMessage());
+    }catch (AggregateNotFoundServiceException ex) {
+      throw new NotFoundControllerException(ex.getMessage());
+    } catch (OptimisticConcurrencyAggregateVersionServiceException ex) {
       throw new BadRequestControllerException(ex.getMessage());
     }
   }

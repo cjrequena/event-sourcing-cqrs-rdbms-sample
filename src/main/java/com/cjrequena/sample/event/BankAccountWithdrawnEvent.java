@@ -22,8 +22,8 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class BankAccountWithdrawnEvent extends Event<WithdrawBankAccountDTO> implements Serializable {
 
-  private static final EEventType type = EEventType.ACCOUNT_WITHDRAWN_EVENT_V1;
-  protected static final ESchemaType schemaType = ESchemaType.ACCOUNT_WITHDRAWN_EVENT_SCHEMA_V1;
+  private static final EEventType type = EEventType.BANK_ACCOUNT_WITHDRAWN_EVENT_V1;
+  protected static final ESchemaType schemaType = ESchemaType.BANK_ACCOUNT_WITHDRAWN_EVENT_SCHEMA_V1;
 
   @Builder
   public BankAccountWithdrawnEvent(

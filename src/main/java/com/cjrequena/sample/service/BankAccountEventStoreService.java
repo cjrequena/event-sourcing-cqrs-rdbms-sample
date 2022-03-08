@@ -11,6 +11,9 @@ import com.cjrequena.sample.event.BankAccountCratedEvent;
 import com.cjrequena.sample.event.BankAccountDepositedEvent;
 import com.cjrequena.sample.event.BankAccountWithdrawnEvent;
 import com.cjrequena.sample.event.Event;
+import com.cjrequena.sample.exception.service.AggregateNotFoundServiceException;
+import com.cjrequena.sample.exception.service.DuplicatedAggregateServiceException;
+import com.cjrequena.sample.exception.service.OptimisticConcurrencyAggregateVersionServiceException;
 import com.cjrequena.sample.mapper.BankAccountMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,47 +52,36 @@ public class BankAccountEventStoreService {
     this.bankAccountMapper = bankAccountMapper;
   }
 
-  public void appendEvent(Event event) {
+  public void appendEvent(Event event) throws OptimisticConcurrencyAggregateVersionServiceException, DuplicatedAggregateServiceException, AggregateNotFoundServiceException {
     Objects.requireNonNull(event);
     AggregateEntity aggregateEntity = new AggregateEntity();
     aggregateEntity.setId(event.getAggregateId());
     aggregateEntity.setName(Constants.BANK_ACCOUNT_AGGREGATE_NAME);
     aggregateEntity.setVersion(event.getVersion());
 
-    if (this.aggregateRepository.existsByIdAndName(aggregateEntity.getId(), aggregateEntity.getName())) {
-      // Check aggregate version.
-      if (this.aggregateRepository.checkAggregateVersion(aggregateEntity)) {
-        // Increment version
-        Integer version = aggregateEntity.getVersion() + 1;
-        aggregateEntity.setVersion(version);
-        event.setVersion(version);
-      } else {
-        log.debug(
-          "Optimistic concurrency control error in aggregate {}: actual version doesn't match expected version {}",
-          aggregateEntity.getId(),
-          aggregateEntity.getVersion());
-        throw new RuntimeException("Optimistic concurrency control error in aggregate");
-      }
-    }
-
-    // Create or Update the Aggregate
-    this.aggregateRepository.save(aggregateEntity);
-
     // Append new Event
     switch (event.getType()) {
-      case ACCOUNT_CREATED_EVENT_V1:
+      case BANK_ACCOUNT_CREATED_EVENT_V1:
+        if (this.aggregateRepository.existsByIdAndName(aggregateEntity.getId(), aggregateEntity.getName())){
+          throw new DuplicatedAggregateServiceException("Aggregate :: " + aggregateEntity.getId() + " :: Already Exists");
+        }
+        // Create the Aggregate
+        this.aggregateRepository.save(aggregateEntity);
         BankAccountCratedEvent bankAccountCratedEvent = (BankAccountCratedEvent) event;
-        bankAccountCratedEvent.getData().setVersion(event.getVersion());
         this.bankAccountEventRepository.save(this.bankAccountMapper.toEntity(bankAccountCratedEvent));
         break;
-      case ACCOUNT_DEPOSITED_EVENT_V1:
+      case BANK_ACCOUNT_DEPOSITED_EVENT_V1:
+        //Check and increment the aggregate version
+        this.checkAndIncrementAggregateVersion(aggregateEntity);
+        event.setVersion(aggregateEntity.getVersion());
         BankAccountDepositedEvent bankAccountDepositedEvent = (BankAccountDepositedEvent) event;
-        bankAccountDepositedEvent.getData().setVersion(event.getVersion());
         this.bankAccountEventRepository.save(this.bankAccountMapper.toEntity(bankAccountDepositedEvent));
         break;
-      case ACCOUNT_WITHDRAWN_EVENT_V1:
+      case BANK_ACCOUNT_WITHDRAWN_EVENT_V1:
+        //Check and increment the aggregate version
+        this.checkAndIncrementAggregateVersion(aggregateEntity);
+        event.setVersion(aggregateEntity.getVersion());
         BankAccountWithdrawnEvent bankAccountWithdrawnEvent = (BankAccountWithdrawnEvent) event;
-        bankAccountWithdrawnEvent.getData().setVersion(event.getVersion());
         this.bankAccountEventRepository.save(this.bankAccountMapper.toEntity(bankAccountWithdrawnEvent));
         break;
     }
@@ -100,17 +92,38 @@ public class BankAccountEventStoreService {
     return this.bankAccountEventRepository.retrieveEvents(aggregateId).stream().map(entity -> {
       Event event = null;
       switch (entity.getType()) {
-        case ACCOUNT_CREATED_EVENT_V1:
+        case BANK_ACCOUNT_CREATED_EVENT_V1:
           event = this.bankAccountMapper.toEvent((BankAccountCratedEventEntity) entity);
           break;
-        case ACCOUNT_DEPOSITED_EVENT_V1:
+        case BANK_ACCOUNT_DEPOSITED_EVENT_V1:
           event = this.bankAccountMapper.toEvent((BankAccountDepositedEventEntity) entity);
           break;
-        case ACCOUNT_WITHDRAWN_EVENT_V1:
+        case BANK_ACCOUNT_WITHDRAWN_EVENT_V1:
           event = this.bankAccountMapper.toEvent((BankAccountWithdrawnEventEntity) entity);
           break;
       }
       return event;
     }).collect(Collectors.toList());
+  }
+
+  public void checkAndIncrementAggregateVersion(AggregateEntity aggregateEntity) throws OptimisticConcurrencyAggregateVersionServiceException, AggregateNotFoundServiceException {
+    if (this.aggregateRepository.existsByIdAndName(aggregateEntity.getId(), aggregateEntity.getName())) {
+      // Check aggregate version.
+      if (this.aggregateRepository.checkAggregateVersion(aggregateEntity)) {
+        // Increment version
+        Integer version = aggregateEntity.getVersion() + 1;
+        aggregateEntity.setVersion(version);
+        // Update aggregate version
+        this.aggregateRepository.save(aggregateEntity);
+      } else {
+        log.debug(
+          "Optimistic concurrency control error in aggregate {}: actual version doesn't match expected version {}",
+          aggregateEntity.getId(),
+          aggregateEntity.getVersion());
+        throw new OptimisticConcurrencyAggregateVersionServiceException("Optimistic concurrency control error in aggregate :: " + aggregateEntity.getId() + " actual version doesn't match expected version :: " + aggregateEntity.getVersion() );
+      }
+    }else{
+      throw new AggregateNotFoundServiceException("Aggregate :: " + aggregateEntity.getId() + " :: Not Found");
+    }
   }
 }
