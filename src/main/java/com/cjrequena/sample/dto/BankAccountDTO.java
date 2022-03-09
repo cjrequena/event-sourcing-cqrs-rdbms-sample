@@ -1,5 +1,6 @@
 package com.cjrequena.sample.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -42,5 +43,10 @@ public class BankAccountDTO implements Serializable {
   @NotNull(message = "balance is a required field")
   @JsonProperty(value = "balance", required = true)
   private BigDecimal balance;
+
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  @JsonProperty(value = "version")
+  @Schema(accessMode = READ_ONLY)
+  private Integer version;
 
 }

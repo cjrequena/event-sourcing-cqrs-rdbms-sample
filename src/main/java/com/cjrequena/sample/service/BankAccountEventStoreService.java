@@ -50,7 +50,7 @@ public class BankAccountEventStoreService {
     AggregateEntity aggregateEntity = new AggregateEntity();
     aggregateEntity.setId(event.getAggregateId());
     aggregateEntity.setName(Constants.BANK_ACCOUNT_AGGREGATE_NAME);
-    aggregateEntity.setVersion(event.getVersion());
+    aggregateEntity.setVersion(event.getAggregateVersion());
     EventEntity eventEntity = this.bankAccountMapper.toEntity(event);
 
     // Append new Event
@@ -66,7 +66,7 @@ public class BankAccountEventStoreService {
       case BANK_ACCOUNT_WITHDRAWN_EVENT_V1:
         //Check and increment the aggregate version
         this.checkAndIncrementAggregateVersion(aggregateEntity);
-        event.setVersion(aggregateEntity.getVersion());
+        event.setAggregateVersion(aggregateEntity.getVersion());
         break;
     }
     this.bankAccountEventRepository.save(this.bankAccountMapper.toEntity(event));

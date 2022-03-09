@@ -37,5 +37,5 @@ public class BankAccountEntity {
   private LocalDate creationDate;
 
   @Column(name = "version")
-  private int version;
+  private Integer version;
 }

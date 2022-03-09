@@ -66,8 +66,8 @@ public abstract class EventEntity<T> {
   @Column(name = "aggregate_id")
   protected UUID aggregateId;
 
-  @Column(name = "version")
-  protected int version;
+  @Column(name = "aggregate_version")
+  protected Integer aggregateVersion;
 
   @Column(name = "offset_event")
   protected Integer offset;

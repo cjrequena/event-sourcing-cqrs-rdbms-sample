@@ -70,6 +70,7 @@ public class BankAccountEventHandlerService {
     List<Event> events = bankAccountEventStoreService.retrieveEventsByAggregateId(event.getAggregateId());
     BankAccountAggregate bankAccountAggregate = new BankAccountAggregate(event.getAggregateId(), events);
     BankAccountEntity bankAccountEntity = bankAccountMapper.toEntity(bankAccountAggregate.getBankAccountDTO());
+    bankAccountEntity.setVersion(bankAccountAggregate.getVersion());
     this.bankAccountRepository.save(bankAccountEntity);
   }
 }

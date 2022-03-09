@@ -53,7 +53,7 @@ public abstract class Event<T> {
   protected UUID aggregateId;
 
   //
-  protected Integer version;
+  protected Integer aggregateVersion;
 
   //
   protected Integer offset;

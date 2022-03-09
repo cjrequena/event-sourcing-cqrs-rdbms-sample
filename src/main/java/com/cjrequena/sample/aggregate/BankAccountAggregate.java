@@ -44,7 +44,7 @@ public class BankAccountAggregate extends Aggregate {
             this.apply((BankAccountWithdrawnEvent) event);
             break;
         }
-        version = event.getVersion();
+        version = event.getAggregateVersion();
       });
   }
 
