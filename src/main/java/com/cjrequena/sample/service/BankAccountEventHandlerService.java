@@ -48,12 +48,12 @@ public class BankAccountEventHandlerService {
     fixedDelayString = "${subscription.fixed-delay-ms}",
     initialDelayString = "${subscription.initial-delay-ms}")
   public void listener() {
-    SubscriptionEntity entity = new SubscriptionEntity();
-    entity.setId(UUID.randomUUID());
-    entity.setConsumerGroup(subscriptionConfiguration.getConsumerGroup());
-    entity.setAggregateName(Constants.BANK_ACCOUNT_AGGREGATE_NAME);
-    entity.setOffsetEvent(0);
-    if (!this.subscriptionRepository.existsByConsumerGroupAndAggregateName(entity.getConsumerGroup(), entity.getAggregateName())) {
+    if (!this.subscriptionRepository.existsByConsumerGroupAndAggregateName(subscriptionConfiguration.getConsumerGroup(), Constants.BANK_ACCOUNT_AGGREGATE_NAME)) {
+      SubscriptionEntity entity = new SubscriptionEntity();
+      entity.setId(UUID.randomUUID());
+      entity.setConsumerGroup(subscriptionConfiguration.getConsumerGroup());
+      entity.setAggregateName(Constants.BANK_ACCOUNT_AGGREGATE_NAME);
+      entity.setOffsetEvent(0);
       this.subscriptionRepository.createSubscription(entity);
     }
     Integer offset = Optional.ofNullable(this.subscriptionRepository.retrieveAndLockSubscriptionOffset(subscriptionConfiguration.getConsumerGroup())).orElse(0);
