@@ -1,11 +1,16 @@
 package com.cjrequena.sample.event;
 
+import com.cjrequena.sample.common.Constants;
 import com.cjrequena.sample.dto.BankAccountDTO;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.springframework.http.MediaType;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -16,24 +21,33 @@ import java.util.UUID;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString(callSuper = true)
 public class BankAccountCratedEvent extends Event<BankAccountDTO> implements Serializable {
 
-  protected EEventType type = EEventType.BANK_ACCOUNT_CREATED_EVENT_V1;
-  protected ESchemaType schemaType = ESchemaType.BANK_ACCOUNT_CREATED_EVENT_SCHEMA_V1;
-
   @Builder
   public BankAccountCratedEvent(
+    UUID id,
     String source,
-    String specVersion,
     String dataContentType,
     String subject,
-    @NotNull OffsetDateTime time,
-    @NotNull BankAccountDTO data,
+    OffsetDateTime time,
+    BankAccountDTO data,
     String dataBase64,
-    @NotNull UUID aggregateId,
-    @NotNull int version) {
-    super(UUID.randomUUID(), source, specVersion, EEventType.BANK_ACCOUNT_CREATED_EVENT_V1, dataContentType, subject, time, data, dataBase64, ESchemaType.BANK_ACCOUNT_CREATED_EVENT_SCHEMA_V1, aggregateId, version);
+    UUID aggregateId,
+    Integer version,
+    Integer offset) {
+    super(
+      Optional.ofNullable(id).orElse(UUID.randomUUID()),
+      Optional.ofNullable(source).orElse(Constants.CLOUD_EVENTS_SOURCE),
+      EEventType.BANK_ACCOUNT_CREATED_EVENT_V1,
+      Optional.ofNullable(dataContentType).orElse(MediaType.APPLICATION_JSON_VALUE),
+      subject,
+      Optional.ofNullable(time).orElse(OffsetDateTime.now()),
+      data,
+      dataBase64,
+      ESchemaType.BANK_ACCOUNT_CREATED_EVENT_SCHEMA_V1,
+      aggregateId,
+      version,
+      offset);
   }
 }

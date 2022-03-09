@@ -22,7 +22,7 @@ public abstract class Aggregate {
 
   protected UUID id;
   protected String name;
-  protected int version;
+  protected Integer version;
   protected List<Event> events = new ArrayList<>();
 
   public Aggregate(UUID aggregateId, String aggregateName, List<Event> events) {

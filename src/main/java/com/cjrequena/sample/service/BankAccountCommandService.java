@@ -49,7 +49,7 @@ public class BankAccountCommandService {
   public void handler(Command command) throws AggregateNotFoundServiceException, OptimisticConcurrencyAggregateVersionServiceException, DuplicatedAggregateServiceException {
     log.debug("Command type: {} Command aggregate_id: {}", command.getType(), command.getAggregateId());
     // Retrieve the whole event history by a specific aggregate id
-    List<Event> events = this.bankAccountEventStoreService.retrieveEvents(command.getAggregateId());
+    List<Event> events = this.bankAccountEventStoreService.retrieveEventsByAggregateId(command.getAggregateId());
     // Recreate the last aggregate snapshot replaying the whole event history by a specific aggregate id
     BankAccountAggregate bankAccountAggregate = new BankAccountAggregate(command.getAggregateId(), events);
 

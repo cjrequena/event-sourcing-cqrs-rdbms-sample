@@ -93,3 +93,9 @@ springdoc:
 spring.cloud:
   loadbalancer.ribbon:
     enabled: false
+
+subscription:
+  enabled: true
+  consumer-group: COSUMER-GROUP-1
+  initial-delay-ms: 1000
+  fixed-delay-ms: 1000

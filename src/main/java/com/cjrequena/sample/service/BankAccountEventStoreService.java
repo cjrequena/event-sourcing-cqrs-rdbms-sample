@@ -2,14 +2,9 @@ package com.cjrequena.sample.service;
 
 import com.cjrequena.sample.common.Constants;
 import com.cjrequena.sample.db.entity.eventstore.AggregateEntity;
-import com.cjrequena.sample.db.entity.eventstore.BankAccountCratedEventEntity;
-import com.cjrequena.sample.db.entity.eventstore.BankAccountDepositedEventEntity;
-import com.cjrequena.sample.db.entity.eventstore.BankAccountWithdrawnEventEntity;
+import com.cjrequena.sample.db.entity.eventstore.EventEntity;
 import com.cjrequena.sample.db.repository.eventstore.AggregateRepository;
 import com.cjrequena.sample.db.repository.eventstore.BankAccountEventRepository;
-import com.cjrequena.sample.event.BankAccountCratedEvent;
-import com.cjrequena.sample.event.BankAccountDepositedEvent;
-import com.cjrequena.sample.event.BankAccountWithdrawnEvent;
 import com.cjrequena.sample.event.Event;
 import com.cjrequena.sample.exception.service.AggregateNotFoundServiceException;
 import com.cjrequena.sample.exception.service.DuplicatedAggregateServiceException;
@@ -24,8 +19,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import static com.cjrequena.sample.common.Constants.*;
 
 /**
  * <p>
@@ -58,6 +51,7 @@ public class BankAccountEventStoreService {
     aggregateEntity.setId(event.getAggregateId());
     aggregateEntity.setName(Constants.BANK_ACCOUNT_AGGREGATE_NAME);
     aggregateEntity.setVersion(event.getVersion());
+    EventEntity eventEntity = this.bankAccountMapper.toEntity(event);
 
     // Append new Event
     switch (event.getType()) {
@@ -67,46 +61,28 @@ public class BankAccountEventStoreService {
         }
         // Create the Aggregate
         this.aggregateRepository.save(aggregateEntity);
-        BankAccountCratedEvent bankAccountCratedEvent = (BankAccountCratedEvent) event;
-        this.bankAccountEventRepository.save(this.bankAccountMapper.toEntity(bankAccountCratedEvent));
         break;
       case BANK_ACCOUNT_DEPOSITED_EVENT_V1:
-        //Check and increment the aggregate version
-        this.checkAndIncrementAggregateVersion(aggregateEntity);
-        event.setVersion(aggregateEntity.getVersion());
-        BankAccountDepositedEvent bankAccountDepositedEvent = (BankAccountDepositedEvent) event;
-        this.bankAccountEventRepository.save(this.bankAccountMapper.toEntity(bankAccountDepositedEvent));
-        break;
       case BANK_ACCOUNT_WITHDRAWN_EVENT_V1:
         //Check and increment the aggregate version
         this.checkAndIncrementAggregateVersion(aggregateEntity);
         event.setVersion(aggregateEntity.getVersion());
-        BankAccountWithdrawnEvent bankAccountWithdrawnEvent = (BankAccountWithdrawnEvent) event;
-        this.bankAccountEventRepository.save(this.bankAccountMapper.toEntity(bankAccountWithdrawnEvent));
         break;
     }
+    this.bankAccountEventRepository.save(this.bankAccountMapper.toEntity(event));
   }
 
   @Transactional(readOnly = true)
-  List<Event> retrieveEvents(UUID aggregateId) {
-    return this.bankAccountEventRepository.retrieveEvents(aggregateId).stream().map(entity -> {
-      Event event = null;
-      switch (entity.getType()) {
-        case BANK_ACCOUNT_CREATED_EVENT_V1:
-          event = this.bankAccountMapper.toEvent((BankAccountCratedEventEntity) entity);
-          break;
-        case BANK_ACCOUNT_DEPOSITED_EVENT_V1:
-          event = this.bankAccountMapper.toEvent((BankAccountDepositedEventEntity) entity);
-          break;
-        case BANK_ACCOUNT_WITHDRAWN_EVENT_V1:
-          event = this.bankAccountMapper.toEvent((BankAccountWithdrawnEventEntity) entity);
-          break;
-      }
-      return event;
-    }).collect(Collectors.toList());
+  List<Event> retrieveEventsByAggregateId(UUID aggregateId) {
+    return this.bankAccountEventRepository.retrieveEventsByAggregateId(aggregateId).stream().map(entity -> bankAccountMapper.toEvent(entity)).collect(Collectors.toList());
   }
 
-  public void checkAndIncrementAggregateVersion(AggregateEntity aggregateEntity) throws OptimisticConcurrencyAggregateVersionServiceException, AggregateNotFoundServiceException {
+  @Transactional(readOnly = true)
+  List<Event> retrieveEventsAfterOffset(Integer offset) {
+    return this.bankAccountEventRepository.retrieveEventsAfterOffset(offset).stream().map(entity -> bankAccountMapper.toEvent(entity)).collect(Collectors.toList());
+  }
+
+  private void checkAndIncrementAggregateVersion(AggregateEntity aggregateEntity) throws OptimisticConcurrencyAggregateVersionServiceException, AggregateNotFoundServiceException {
     if (this.aggregateRepository.existsByIdAndName(aggregateEntity.getId(), aggregateEntity.getName())) {
       // Check aggregate version.
       if (this.aggregateRepository.checkAggregateVersion(aggregateEntity)) {

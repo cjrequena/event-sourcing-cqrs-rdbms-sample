@@ -23,25 +23,25 @@ public abstract class Event<T> {
   protected UUID id;
 
   // Identifies the context in which an event happened.
-  protected String source = "https://event-sourcing-cqrs-sample.sample.cjrequena.com";
+  protected  String source;
 
   // The version of the CloudEvents specification which the event uses.
-  protected String specVersion = "1.0";
+  protected final String specVersion = "1.0";
 
   // Type of message
   protected EEventType type;
 
   // Content type of the data value. Must adhere to RFC 2046 format.
-  protected String dataContentType = "application/json";
+  public String dataContentType;
 
   // Describes the subject of the event in the context of the event producer (identified by source).
   protected String subject;
 
   // Date and time for when the message was published
-  protected OffsetDateTime time = OffsetDateTime.now();
+  protected OffsetDateTime time;
 
   // The event payload.
-   protected T data;
+  protected T data;
 
   // Base64 encoded event payload. Must adhere to RFC4648.
   protected String dataBase64;
@@ -54,4 +54,7 @@ public abstract class Event<T> {
 
   //
   protected Integer version;
+
+  //
+  protected Integer offset;
 }

@@ -4,6 +4,7 @@ import com.cjrequena.sample.db.entity.eventstore.BankAccountCratedEventEntity;
 import com.cjrequena.sample.db.entity.eventstore.EventEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.query.QueryByExampleExecutor;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +20,11 @@ import java.util.UUID;
 @Repository
 public interface BankAccountEventRepository extends CrudRepository<EventEntity, UUID>, QueryByExampleExecutor<BankAccountCratedEventEntity> {
 
-  @Query(value = "SELECT * FROM BANK_ACCOUNT_EVENT WHERE AGGREGATE_ID = ? ORDER BY VERSION ASC", nativeQuery = true)
-  List<EventEntity> retrieveEvents(UUID aggregateId);
+  @Query(value = "SELECT * FROM BANK_ACCOUNT_EVENT WHERE AGGREGATE_ID = :aggregateId ORDER BY VERSION ASC", nativeQuery = true)
+  List<EventEntity> retrieveEventsByAggregateId(@Param("aggregateId") UUID aggregateId);
+
+  @Query(value = "SELECT * FROM BANK_ACCOUNT_EVENT WHERE OFFSET_EVENT > :offset ORDER BY OFFSET_EVENT ASC", nativeQuery = true)
+  List<EventEntity> retrieveEventsAfterOffset(@Param("offset") Integer offset);
+
+
 }

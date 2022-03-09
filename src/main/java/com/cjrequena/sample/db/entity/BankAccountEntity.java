@@ -23,8 +23,8 @@ import java.util.UUID;
 @Table(name = "bank_account")
 public class BankAccountEntity {
   @Id
-  @Column(name = "account_id")
-  private UUID accountId;
+  @Column(name = "id")
+  private UUID id;
 
   @Column(name = "owner")
   private String owner;

@@ -25,5 +25,13 @@ public interface SubscriptionRepository extends CrudRepository<SubscriptionEntit
   @Query(value = "INSERT INTO SUBSCRIPTION (ID, CONSUMER_GROUP, AGGREGATE_NAME, OFFSET_EVENT) VALUES (:#{#subscription.id}, :#{#subscription.consumerGroup}, :#{#subscription.aggregateName}, :#{#subscription.offsetEvent})", nativeQuery = true)
   void createSubscription(SubscriptionEntity subscription);
 
+  @Modifying
+  @Query(value = "UPDATE SUBSCRIPTION SET OFFSET_EVENT = :offset WHERE CONSUMER_GROUP = :consumerGroup", nativeQuery = true)
+  void updateSubscription(@Param("consumerGroup") String consumerGroup, @Param("offset") Integer offset);
+
+  @Query(value = "SELECT OFFSET_EVENT FROM SUBSCRIPTION WHERE CONSUMER_GROUP = :consumerGroup FOR UPDATE NOWAIT", nativeQuery = true)
+  Integer retrieveAndLockSubscriptionOffset(@Param("consumerGroup") String consumerGroup);
+
+
   boolean existsByConsumerGroupAndAggregateName(@Param("consumerGroup") String consumerGroup, @Param("aggregateName") String aggregateName);
 }
