@@ -10,6 +10,7 @@ import com.cjrequena.sample.exception.controller.BadRequestControllerException;
 import com.cjrequena.sample.exception.controller.ConflictControllerException;
 import com.cjrequena.sample.exception.controller.NotFoundControllerException;
 import com.cjrequena.sample.exception.service.AggregateNotFoundServiceException;
+import com.cjrequena.sample.exception.service.BankAccountServiceException;
 import com.cjrequena.sample.exception.service.DuplicatedAggregateServiceException;
 import com.cjrequena.sample.exception.service.OptimisticConcurrencyAggregateVersionServiceException;
 import com.cjrequena.sample.service.BankAccountCommandService;
@@ -105,7 +106,7 @@ public class BankAccountCommandController {
       throw new ConflictControllerException(ex.getMessage());
     } catch (AggregateNotFoundServiceException ex) {
       throw new NotFoundControllerException(ex.getMessage());
-    } catch (OptimisticConcurrencyAggregateVersionServiceException ex) {
+    } catch (OptimisticConcurrencyAggregateVersionServiceException | BankAccountServiceException ex) {
       throw new BadRequestControllerException(ex.getMessage());
     }
   }
@@ -161,7 +162,7 @@ public class BankAccountCommandController {
       throw new ConflictControllerException(ex.getMessage());
     }catch (AggregateNotFoundServiceException ex) {
       throw new NotFoundControllerException(ex.getMessage());
-    } catch (OptimisticConcurrencyAggregateVersionServiceException ex) {
+    } catch (OptimisticConcurrencyAggregateVersionServiceException | BankAccountServiceException ex) {
       throw new BadRequestControllerException(ex.getMessage());
     }
   }
@@ -202,7 +203,7 @@ public class BankAccountCommandController {
       throw new ConflictControllerException(ex.getMessage());
     }catch (AggregateNotFoundServiceException ex) {
       throw new NotFoundControllerException(ex.getMessage());
-    } catch (OptimisticConcurrencyAggregateVersionServiceException ex) {
+    } catch (OptimisticConcurrencyAggregateVersionServiceException | BankAccountServiceException ex) {
       throw new BadRequestControllerException(ex.getMessage());
     }
   }
