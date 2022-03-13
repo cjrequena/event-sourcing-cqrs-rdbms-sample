@@ -9,7 +9,7 @@ import com.cjrequena.sample.db.repository.BankAccountRepository;
 import com.cjrequena.sample.db.repository.eventstore.SubscriptionRepository;
 import com.cjrequena.sample.event.Event;
 import com.cjrequena.sample.mapper.BankAccountMapper;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -35,13 +35,13 @@ import java.util.UUID;
 @Component
 @Transactional
 @ConditionalOnProperty(name = "subscription.enabled", havingValue = "true")
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BankAccountEventHandlerService {
 
-  private SubscriptionRepository subscriptionRepository;
-  private BankAccountEventStoreService bankAccountEventStoreService;
-  private BankAccountRepository bankAccountRepository;
-  private BankAccountMapper bankAccountMapper;
+  private final SubscriptionRepository subscriptionRepository;
+  private final BankAccountEventStoreService bankAccountEventStoreService;
+  private final BankAccountRepository bankAccountRepository;
+  private final BankAccountMapper bankAccountMapper;
   private final SubscriptionConfiguration subscriptionConfiguration;
 
   @Scheduled(

@@ -5,7 +5,7 @@ import com.cjrequena.sample.db.repository.BankAccountRepository;
 import com.cjrequena.sample.dto.BankAccountDTO;
 import com.cjrequena.sample.exception.service.BankAccountNotFoundServiceException;
 import com.cjrequena.sample.mapper.BankAccountMapper;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Streamable;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BankAccountQueryService {
 
   private final BankAccountRepository bankAccountRepository;

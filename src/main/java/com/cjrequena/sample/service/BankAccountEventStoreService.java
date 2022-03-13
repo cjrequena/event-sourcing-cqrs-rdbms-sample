@@ -10,8 +10,8 @@ import com.cjrequena.sample.exception.service.AggregateNotFoundServiceException;
 import com.cjrequena.sample.exception.service.DuplicatedAggregateServiceException;
 import com.cjrequena.sample.exception.service.OptimisticConcurrencyAggregateVersionServiceException;
 import com.cjrequena.sample.mapper.BankAccountMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,18 +32,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class BankAccountEventStoreService {
 
-  private AggregateRepository aggregateRepository;
-  private BankAccountEventRepository bankAccountEventRepository;
-  private BankAccountMapper bankAccountMapper;
-
-  @Autowired
-  public BankAccountEventStoreService(BankAccountEventRepository bankAccountEventRepository, AggregateRepository aggregateRepository, BankAccountMapper bankAccountMapper) {
-    this.bankAccountEventRepository = bankAccountEventRepository;
-    this.aggregateRepository = aggregateRepository;
-    this.bankAccountMapper = bankAccountMapper;
-  }
+  private final AggregateRepository aggregateRepository;
+  private final BankAccountEventRepository bankAccountEventRepository;
+  private final BankAccountMapper bankAccountMapper;
 
   public void appendEvent(Event event) throws OptimisticConcurrencyAggregateVersionServiceException, DuplicatedAggregateServiceException, AggregateNotFoundServiceException {
     Objects.requireNonNull(event);

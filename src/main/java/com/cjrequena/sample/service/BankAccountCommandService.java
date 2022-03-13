@@ -14,7 +14,7 @@ import com.cjrequena.sample.exception.service.BankAccountServiceException;
 import com.cjrequena.sample.exception.service.DuplicatedAggregateServiceException;
 import com.cjrequena.sample.exception.service.OptimisticConcurrencyAggregateVersionServiceException;
 import com.cjrequena.sample.mapper.BankAccountMapper;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -35,12 +35,12 @@ import java.util.List;
  */
 @Slf4j
 @Service
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BankAccountCommandService {
 
-  private ApplicationEventPublisher applicationEventPublisher;
-  private BankAccountEventStoreService bankAccountEventStoreService;
-  private BankAccountMapper bankAccountMapper;
+  private final ApplicationEventPublisher applicationEventPublisher;
+  private final BankAccountEventStoreService bankAccountEventStoreService;
+  private final BankAccountMapper bankAccountMapper;
 
   @Transactional
   public void handler(Command command)

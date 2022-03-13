@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -50,14 +51,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Slf4j
 @RestController
 @RequestMapping(value = "/event-sourcing-cqrs-rbdms-sample")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BankAccountCommandController {
 
-  private BankAccountCommandService bankAccountCommandService;
-
-  @Autowired
-  public BankAccountCommandController(BankAccountCommandService bankAccountCommandService) {
-    this.bankAccountCommandService = bankAccountCommandService;
-  }
+  private final BankAccountCommandService bankAccountCommandService;
 
   @Operation(
     summary = "Command for new bank account creation ",
