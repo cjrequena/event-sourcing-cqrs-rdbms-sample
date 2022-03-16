@@ -34,7 +34,7 @@ public class BankAccountDepositedEvent extends Event<DepositBankAccountDTO> impl
     DepositBankAccountDTO data,
     String dataBase64,
     UUID aggregateId,
-    Integer version,
+    Integer aggregateVersion,
     Integer offset) {
     super(
       Optional.ofNullable(id).orElse(UUID.randomUUID()),
@@ -47,7 +47,7 @@ public class BankAccountDepositedEvent extends Event<DepositBankAccountDTO> impl
       dataBase64,
       ESchemaType.BANK_ACCOUNT_DEPOSITED_EVENT_SCHEMA_V1,
       aggregateId,
-      version,
+      aggregateVersion,
       offset);
   }
 }

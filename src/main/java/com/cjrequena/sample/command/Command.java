@@ -37,6 +37,6 @@ public abstract class Command<T> {
   protected T data;
 
   @NotNull
-  protected Integer version;
+  protected Integer aggregateVersion;
 
 }

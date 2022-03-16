@@ -149,7 +149,7 @@ public class BankAccountCommandController {
   public ResponseEntity<Void> deposit(@RequestBody DepositBankAccountDTO dto, @RequestHeader("aggregate-version") Integer aggregateVersion, HttpServletRequest request, BindingResult bindingResult, UriComponentsBuilder ucBuilder)
     throws NotFoundControllerException, BadRequestControllerException, ConflictControllerException {
     try {
-      DepositBankAccountCommand command = DepositBankAccountCommand.builder().depositBankAccountDTO(dto).version(aggregateVersion).build();
+      DepositBankAccountCommand command = DepositBankAccountCommand.builder().depositBankAccountDTO(dto).aggregateVersion(aggregateVersion).build();
       this.bankAccountCommandService.handler(command);
       // Headers
       HttpHeaders headers = new HttpHeaders();
@@ -190,7 +190,7 @@ public class BankAccountCommandController {
   public ResponseEntity<Void> withdraw(@RequestBody WithdrawBankAccountDTO dto, @RequestHeader("aggregate-version") Integer aggregateVersion, HttpServletRequest request, BindingResult bindingResult,UriComponentsBuilder ucBuilder)
     throws NotFoundControllerException, BadRequestControllerException, ConflictControllerException {
     try {
-      WithdrawBankAccountCommand command = WithdrawBankAccountCommand.builder().withdrawBankAccountDTO(dto).version(aggregateVersion).build();
+      WithdrawBankAccountCommand command = WithdrawBankAccountCommand.builder().withdrawBankAccountDTO(dto).aggregateVersion(aggregateVersion).build();
       this.bankAccountCommandService.handler(command);
       // Headers
       HttpHeaders headers = new HttpHeaders();

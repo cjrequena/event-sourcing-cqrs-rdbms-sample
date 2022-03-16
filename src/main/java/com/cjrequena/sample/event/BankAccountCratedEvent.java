@@ -34,7 +34,7 @@ public class BankAccountCratedEvent extends Event<BankAccountDTO> implements Ser
     BankAccountDTO data,
     String dataBase64,
     UUID aggregateId,
-    Integer version,
+    Integer aggregateVersion,
     Integer offset) {
     super(
       Optional.ofNullable(id).orElse(UUID.randomUUID()),
@@ -47,7 +47,7 @@ public class BankAccountCratedEvent extends Event<BankAccountDTO> implements Ser
       dataBase64,
       ESchemaType.BANK_ACCOUNT_CREATED_EVENT_SCHEMA_V1,
       aggregateId,
-      version,
+      aggregateVersion,
       offset);
   }
 }
