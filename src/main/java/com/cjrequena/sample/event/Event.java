@@ -34,10 +34,13 @@ public abstract class Event<T> {
   // Content type of the data value. Must adhere to RFC 2046 format.
   public String dataContentType;
 
+  // Identifies the schema that data adheres to.
+  protected ESchemaType dataSchema;
+
   // Describes the subject of the event in the context of the event producer (identified by source).
   protected String subject;
 
-  // Date and time for when the message was published
+  // Timestamp of when the occurrence happened. Must adhere to RFC 3339
   protected OffsetDateTime time;
 
   // The event payload.
@@ -45,9 +48,6 @@ public abstract class Event<T> {
 
   // Base64 encoded event payload. Must adhere to RFC4648.
   protected String dataBase64;
-
-  // Identifies the schema that data adheres to.
-  protected ESchemaType dataSchema;
 
   // Unique aggregateId for the specific message. This id is globally unique
   protected UUID aggregateId;

@@ -41,11 +41,11 @@ public class BankAccountWithdrawnEvent extends Event<WithdrawBankAccountDTO> imp
       Optional.ofNullable(source).orElse(Constants.CLOUD_EVENTS_SOURCE),
       EEventType.BANK_ACCOUNT_WITHDRAWN_EVENT_V1,
       Optional.ofNullable(dataContentType).orElse(MediaType.APPLICATION_JSON_VALUE),
+      ESchemaType.BANK_ACCOUNT_WITHDRAWN_EVENT_SCHEMA_V1,
       subject,
       Optional.ofNullable(time).orElse(OffsetDateTime.now()),
       data,
       dataBase64,
-      ESchemaType.BANK_ACCOUNT_WITHDRAWN_EVENT_SCHEMA_V1,
       aggregateId,
       aggregateVersion,
       offset);
