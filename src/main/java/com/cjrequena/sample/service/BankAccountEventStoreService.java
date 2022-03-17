@@ -67,12 +67,12 @@ public class BankAccountEventStoreService {
   }
 
   @Transactional(readOnly = true)
-  List<Event> retrieveEventsByAggregateId(UUID aggregateId) {
+  public List<Event> retrieveEventsByAggregateId(UUID aggregateId) {
     return this.bankAccountEventRepository.retrieveEventsByAggregateId(aggregateId).stream().map(entity -> bankAccountMapper.toEvent(entity)).collect(Collectors.toList());
   }
 
   @Transactional(readOnly = true)
-  List<Event> retrieveEventsAfterOffset(Integer offset) {
+  public List<Event> retrieveEventsAfterOffset(Integer offset) {
     return this.bankAccountEventRepository.retrieveEventsAfterOffset(offset).stream().map(entity -> bankAccountMapper.toEvent(entity)).collect(Collectors.toList());
   }
 
