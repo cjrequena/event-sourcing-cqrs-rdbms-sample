@@ -54,7 +54,11 @@ public interface BankAccountMapper {
 
   BankAccountWithdrawnEvent toEvent(WithdrawBankAccountCommand command);
 
-  //@Mapping(source = "order.driverId", target = "driverId")
+//  @Mapping(source = "id", target = "id")
+//  @Mapping(source = "id", target = "data.id")
+//  @Mapping(source = "source", target = "data.source")
+//  @Mapping(source = "dataContentType", target = "data.dataContentType")
+//  @Mapping(source = "data", target = "data.data")
   BankAccountCratedEventEntity toEntity(BankAccountCratedEvent event);
 
   BankAccountDepositedEventEntity toEntity(BankAccountDepositedEvent event);

@@ -9,7 +9,7 @@ of commands and queries. This concept has a serious influence on the application
 and “write” databases. There are actually two databases instead of just one, compared to when the traditional CRUD approach is used. The idea behind CQRS is that 
 the whole application will work better when we separate the responsibility between different parts of code and different elements of the system.
 
-![](event-sourcing-cqrs-diagram.png)
+![](x-readme-images/event-sourcing-cqrs-diagram.png)
 
 # **Commands**
 
@@ -25,7 +25,7 @@ As a consequence, the command flow in CQRS goes hand in hand with the Task-Based
 four basic operations available for users - Create, Edit, Save and Delete, a task-based UI makes each operation explicit, like Check Out, Add Item or Cancel Order. 
 By doing this, it makes operations available to the user easily translatable to commands that the UI sends to the Domain Model via an API.
 
-![](commands-diagram.png)
+![](x-readme-images/commands-diagram.png)
 
 
 # **Events**
@@ -35,7 +35,7 @@ the business facts. Events are represented in the past tense. For example, **Ord
 of our business process purely in terms of events and reactions, which is a fancy way to say **"cause-and-effect"**. Important events cause reactions elsewhere in the 
 system, and it’s often important to understand why those reactions occurred
 
-![](events-diagram.png)
+![](x-readme-images/events-diagram.png)
 
 # **Reactions**
 
@@ -43,7 +43,7 @@ A reaction is something that needs to happen after something else happens, **"Th
 a new user account is created, we will send an acknowledgement by email". UserAccountCreated → is the Event and SendAcknoledgementEmail → is the Reaction. Events are 
 always past-tense, while Reactions are always future-tense.
 
-![](reactions-diagram.png)
+![](x-readme-images/reactions-diagram.png)
 
 # **Policies**
 
@@ -51,7 +51,7 @@ A policy is a flow of events and reactions together. A policy captures the core 
 a manual process or a combination of both an automated and manual process. A policy must include processes for when things go wrong, for example, What happens when a 
 booking is not successfully confirmed?
 
-![](policies-diagram.png)
+![](x-readme-images/policies-diagram.png)
 
 # **Aggregates**
 
@@ -63,14 +63,14 @@ be interesting to the domain"_
 
 Aggregates bring structure to our design by isolating related concerns from one another.
 
-![](aggregates-diagram.png)
+![](x-readme-images/aggregates-diagram.png)
 
 # **Bounded Context**
 
 Bounded context are used to create bulkheads within a large, complex system. Whereas aggregate boundaries group related behaviors together, bounded context group 
 related language, meaning and culture. By defining bounded contexts, we can begin to understand how subdomains of the system interact to each other.
 
-![](bounded-context-diagram.png)
+![](x-readme-images/bounded-context-diagram.png)
 
 # **Event Store**
 
@@ -92,4 +92,4 @@ Unlike commands, queries do not need to involve the Domain Model because queries
 queries have no side effects and are completely idempotent, so it doesn’t matter how many times the query gets executed - it will always return the same result, unless 
 the system state changed in the meantime.
 
-![](queries-diagram.png)
+![](x-readme-images/queries-diagram.png)

@@ -126,7 +126,7 @@ logging.level: # Log levels severity mapping. For instance, `logging.level.org.s
 
 # Postgres
 spring.datasource.postgres.type: com.zaxxer.hikari.HikariDataSource
-spring.datasource.postgres.jdbcUrl: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/eventstore
+spring.datasource.postgres.jdbcUrl: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/postgres
 spring.datasource.postgres.driver-class-name: org.postgresql.Driver
 spring.datasource.postgres.username: postgres
 spring.datasource.postgres.password: postgres

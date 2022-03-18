@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    hostname: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      PGDATA: /data/postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - type: volume
+        source: postgres-volume-data
+        target: /data/postgres
+    networks:
+      sample-network:
+    restart: unless-stopped
+#---------------------------------------------------------------------------------------------------------------------
+networks:
+  sample-network:
+    name: sample-network-c558055c-87fa-43b1-9bbb-ae7e15556445.local
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+#---------------------------------------------------------------------------------------------------------------------
+volumes:
+  postgres-volume-data:
+    name: postgres-volume-data
