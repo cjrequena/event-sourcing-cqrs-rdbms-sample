@@ -7,10 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -31,44 +28,30 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-  entityManagerFactoryRef = "entityManagerFactoryH2",
-  transactionManagerRef = "transactionManagerH2",
+  entityManagerFactoryRef = "entityManagerFactoryPostgres", transactionManagerRef = "transactionManagerPostgres",
   basePackages = {"com.cjrequena.sample.db.repository"}
 )
-@Profile({"h2"})
-public class H2Configuration {
+public class PostgresConfiguration {
 
-  @Bean(name = "dataSourceH2", destroyMethod = "")
+  @Bean(name = "dataSourcePostgres", destroyMethod = "")
   @Validated
-  @ConfigurationProperties(prefix = "spring.datasource.h2")
+  @ConfigurationProperties(prefix = "spring.datasource.postgres")
   @ConditionalOnClass({HikariDataSource.class})
-  public DataSource dataSource() {
-    return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2).build();
+  public HikariDataSource dataSourcePostgres() {
+    return new HikariDataSource();
   }
 
-  /**
-   *
-   * @param builder
-   * @param dataSource
-   * @return
-   */
-  @Bean("entityManagerFactoryH2")
-  public LocalContainerEntityManagerFactoryBean entityManagerFactoryH2(EntityManagerFactoryBuilder builder, @Qualifier("dataSourceH2") DataSource dataSource) {
+  @Bean("entityManagerFactoryPostgres")
+  public LocalContainerEntityManagerFactoryBean entityManagerFactoryPostgres(EntityManagerFactoryBuilder builder, @Qualifier("dataSourcePostgres") DataSource dataSource) {
     return builder
       .dataSource(dataSource)
       .packages("com.cjrequena.sample.db.entity")
       .persistenceUnit("chinook")
       .build();
   }
-
-  /**
-   *
-   * @param entityManagerFactoryH2
-   * @return
-   */
-  @Bean("transactionManagerH2")
-  public PlatformTransactionManager transactionManagerH2(@Qualifier("entityManagerFactoryH2") EntityManagerFactory entityManagerFactoryH2) {
-    return new JpaTransactionManager(entityManagerFactoryH2);
+  
+  @Bean("transactionManagerPostgres")
+  public PlatformTransactionManager transactionManagerPostgres(@Qualifier("entityManagerFactoryPostgres") EntityManagerFactory entityManagerFactoryPostgres) {
+    return new JpaTransactionManager(entityManagerFactoryPostgres);
   }
 }
-

@@ -69,7 +69,7 @@ public abstract class EventEntity<T> {
   @Column(name = "aggregate_version")
   protected Integer aggregateVersion;
 
-  @Column(name = "offset_event")
+  @Column(name = "offset_event", insertable = false, updatable = false)
   protected Integer offset;
 
   @Override
