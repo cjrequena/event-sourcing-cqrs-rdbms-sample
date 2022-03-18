@@ -118,18 +118,19 @@ logging.level: # Log levels severity mapping. For instance, `logging.level.org.s
   org.flywaydb: INFO
 
 # H2
-spring.datasource.h2.url: jdbc:h2:mem:testdb
+spring.datasource.h2.url: jdbc:h2:mem:testdb;MODE=PostgreSQL
 spring.datasource.h2.driverClassName: org.h2.Driver
 spring.datasource.h2.username: sa
 #spring.datasource.password: password
-spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
 spring.h2.console.enabled: true
 
 # JPA specific configs
 spring.jpa.open-in-view: false
+spring.jpa.database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.PostgreSQL95Dialect
+#spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+#spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.H2Dialect
 #spring.jpa.properties.hibernate.connection.provider_class: org.hibernate.hikaricp.internal.HikariCPConnectionProvider
-#spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
-spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.H2Dialect
 spring.jpa.properties.hibernate.show_sql: false
 spring.jpa.properties.hibernate.format_sql: true
 spring.jpa.properties.hibernate.use_sql: true
