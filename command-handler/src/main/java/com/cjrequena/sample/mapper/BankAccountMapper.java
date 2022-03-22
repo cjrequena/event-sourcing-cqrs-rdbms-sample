@@ -69,6 +69,4 @@ public interface BankAccountMapper {
 
   BankAccountWithdrawnEvent toEvent(BankAccountWithdrawnEventEntity entity);
 
-  BankAccountCratedEventEntity toEntity(CreateBankAccountCommand command);
-
 }

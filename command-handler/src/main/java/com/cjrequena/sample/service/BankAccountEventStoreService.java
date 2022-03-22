@@ -1,6 +1,6 @@
 package com.cjrequena.sample.service;
 
-import com.cjrequena.sample.common.Constants;
+import com.cjrequena.sample.aggregate.EAggregate;
 import com.cjrequena.sample.db.entity.eventstore.AggregateEntity;
 import com.cjrequena.sample.db.entity.eventstore.EventEntity;
 import com.cjrequena.sample.db.repository.eventstore.AggregateRepository;
@@ -43,7 +43,7 @@ public class BankAccountEventStoreService {
     Objects.requireNonNull(event);
     AggregateEntity aggregateEntity = new AggregateEntity();
     aggregateEntity.setId(event.getAggregateId());
-    aggregateEntity.setName(Constants.BANK_ACCOUNT_AGGREGATE_NAME);
+    aggregateEntity.setName(EAggregate.BANK_ACCOUNTS.getValue());
     aggregateEntity.setVersion(event.getVersion());
     EventEntity eventEntity = this.bankAccountMapper.toEntity(event);
 
@@ -68,12 +68,12 @@ public class BankAccountEventStoreService {
 
   @Transactional(readOnly = true)
   public List<Event> retrieveEventsByAggregateId(UUID aggregateId) {
-    return this.bankAccountEventRepository.retrieveEventsByAggregateId(aggregateId).stream().map(entity -> bankAccountMapper.toEvent(entity)).collect(Collectors.toList());
+    return this.bankAccountEventRepository.retrieveEventsByAggregateId(aggregateId).stream().map(bankAccountMapper::toEvent).collect(Collectors.toList());
   }
 
   @Transactional(readOnly = true)
   public List<Event> retrieveEventsAfterOffset(Integer offset) {
-    return this.bankAccountEventRepository.retrieveEventsAfterOffset(offset).stream().map(entity -> bankAccountMapper.toEvent(entity)).collect(Collectors.toList());
+    return this.bankAccountEventRepository.retrieveEventsAfterOffset(offset).stream().map(bankAccountMapper::toEvent).collect(Collectors.toList());
   }
 
   private void checkAndIncrementVersion(AggregateEntity aggregateEntity) throws OptimisticConcurrencyServiceException, AggregateNotFoundServiceException {

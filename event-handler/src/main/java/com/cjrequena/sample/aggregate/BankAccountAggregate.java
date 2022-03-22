@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.UUID;
 
-import static com.cjrequena.sample.common.Constants.BANK_ACCOUNT_AGGREGATE_NAME;
 
 @Data
 @ToString(callSuper = true)
@@ -26,7 +25,7 @@ public class BankAccountAggregate extends Aggregate {
   private BankAccountDTO bankAccountDTO;
 
   public BankAccountAggregate(UUID aggregateId, List<Event> events) {
-    super(aggregateId, BANK_ACCOUNT_AGGREGATE_NAME, events);
+    super(aggregateId, EAggregate.BANK_ACCOUNTS.getValue(), events);
   }
 
   @Override

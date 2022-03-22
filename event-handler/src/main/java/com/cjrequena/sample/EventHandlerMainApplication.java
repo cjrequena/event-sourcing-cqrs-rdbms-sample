@@ -9,10 +9,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Log4j2
 @SpringBootApplication
 @EnableScheduling
-public class BankAccountEventHandlerMainApplication implements CommandLineRunner {
+public class EventHandlerMainApplication implements CommandLineRunner {
 
   public static void main(String[] args) {
-    SpringApplication.run(BankAccountEventHandlerMainApplication.class, args);
+    SpringApplication.run(EventHandlerMainApplication.class, args);
   }
 
   @Override
