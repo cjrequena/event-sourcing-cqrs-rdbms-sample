@@ -17,9 +17,17 @@ import java.util.UUID;
 @Repository
 public interface AggregateRepository extends CrudRepository<AggregateEntity, UUID> {
 
-  boolean existsByIdAndName(@Param("id") UUID id, @Param("name") String name);
+  @Query(value = "SELECT CASE "
+    + " WHEN COUNT(A)> 0 THEN TRUE ELSE FALSE END "
+    + " FROM AGGREGATE A "
+    + " WHERE A.ID = :id AND A.NAME = :name",
+    nativeQuery = true)
+  boolean checkAggregate(@Param("id") UUID id, @Param("name") String name);
 
-  @Query(value = "SELECT CASE WHEN  VERSION = :#{#aggregate.version} THEN True ELSE False END AS TEST FROM AGGREGATE WHERE ID=:#{#aggregate.id}", nativeQuery = true)
+  @Query(value = "SELECT CASE "
+    + " WHEN  VERSION = :#{#aggregate.version} THEN True ELSE False END "
+    + " FROM AGGREGATE WHERE ID=:#{#aggregate.id}",
+    nativeQuery = true)
   boolean checkVersion(@Param("aggregate") AggregateEntity aggregateEntity);
 
 }

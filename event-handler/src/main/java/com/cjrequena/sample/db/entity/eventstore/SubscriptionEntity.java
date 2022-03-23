@@ -30,9 +30,6 @@ public class SubscriptionEntity {
   @Column(name = "consumer_group")
   private String consumerGroup;
 
-  @Column(name = "aggregate_name")
-  private String aggregateName;
-
   @Column(name = "offset_event")
   private int offsetEvent;
 }

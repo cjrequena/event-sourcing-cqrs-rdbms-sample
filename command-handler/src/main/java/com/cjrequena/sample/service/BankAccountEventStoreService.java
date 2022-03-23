@@ -50,7 +50,7 @@ public class BankAccountEventStoreService {
     // Append new Event
     switch (event.getType()) {
       case BANK_ACCOUNT_CREATED_EVENT_V1:
-        if (this.aggregateRepository.existsByIdAndName(aggregateEntity.getId(), aggregateEntity.getName())){
+        if (this.aggregateRepository.checkAggregate(aggregateEntity.getId(), aggregateEntity.getName())){
           throw new DuplicatedAggregateServiceException("Aggregate :: " + aggregateEntity.getId() + " :: Already Exists");
         }
         // Create the Aggregate
@@ -77,7 +77,7 @@ public class BankAccountEventStoreService {
   }
 
   private void checkAndIncrementVersion(AggregateEntity aggregateEntity) throws OptimisticConcurrencyServiceException, AggregateNotFoundServiceException {
-    if (this.aggregateRepository.existsByIdAndName(aggregateEntity.getId(), aggregateEntity.getName())) {
+    if (this.aggregateRepository.checkAggregate(aggregateEntity.getId(), aggregateEntity.getName())) {
       // Check aggregate version.
       if (this.aggregateRepository.checkVersion(aggregateEntity)) {
         // Increment version

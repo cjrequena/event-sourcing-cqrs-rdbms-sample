@@ -22,16 +22,31 @@ import java.util.UUID;
 public interface SubscriptionRepository extends CrudRepository<SubscriptionEntity, UUID> {
 
   @Modifying
-  @Query(value = "INSERT INTO SUBSCRIPTION (ID, CONSUMER_GROUP, AGGREGATE_NAME, OFFSET_EVENT) VALUES (:#{#subscription.id}, :#{#subscription.consumerGroup}, :#{#subscription.aggregateName}, :#{#subscription.offsetEvent})", nativeQuery = true)
+  @Query(value = "INSERT INTO SUBSCRIPTION "
+    + " (ID, CONSUMER_GROUP, OFFSET_EVENT) "
+    + " VALUES (:#{#subscription.id}, :#{#subscription.consumerGroup}, :#{#subscription.offsetEvent})"
+    , nativeQuery = true)
   void createSubscription(SubscriptionEntity subscription);
 
   @Modifying
-  @Query(value = "UPDATE SUBSCRIPTION SET OFFSET_EVENT = :offset WHERE CONSUMER_GROUP = :consumerGroup", nativeQuery = true)
+  @Query(value = "UPDATE SUBSCRIPTION "
+    + " SET OFFSET_EVENT = :offset "
+    + " WHERE CONSUMER_GROUP = :consumerGroup",
+    nativeQuery = true)
   void updateSubscription(@Param("consumerGroup") String consumerGroup, @Param("offset") Integer offset);
 
-  @Query(value = "SELECT OFFSET_EVENT FROM SUBSCRIPTION WHERE CONSUMER_GROUP = :consumerGroup FOR UPDATE NOWAIT", nativeQuery = true)
+  @Query(value = "SELECT OFFSET_EVENT "
+    + " FROM SUBSCRIPTION "
+    + " WHERE CONSUMER_GROUP = :consumerGroup "
+    + " FOR UPDATE NOWAIT",
+    nativeQuery = true)
   Integer retrieveAndLockSubscriptionOffset(@Param("consumerGroup") String consumerGroup);
 
-
-  boolean existsByConsumerGroupAndAggregateName(@Param("consumerGroup") String consumerGroup, @Param("aggregateName") String aggregateName);
+  @Query(value = "SELECT CASE "
+    + " WHEN COUNT(S) > 0 THEN true ELSE false END "
+    + " FROM SUBSCRIPTION S "
+    + " WHERE S.CONSUMER_GROUP = :consumerGroup",
+    nativeQuery = true
+  )
+  boolean checkSubscriptions(@Param("consumerGroup") String consumerGroup);
 }

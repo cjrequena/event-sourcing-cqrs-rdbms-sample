@@ -1,7 +1,6 @@
 package com.cjrequena.sample.service;
 
 import com.cjrequena.sample.aggregate.BankAccountAggregate;
-import com.cjrequena.sample.aggregate.EAggregate;
 import com.cjrequena.sample.configuration.SubscriptionConfiguration;
 import com.cjrequena.sample.db.entity.BankAccountEntity;
 import com.cjrequena.sample.db.entity.eventstore.SubscriptionEntity;
@@ -48,11 +47,10 @@ public class BankAccountEventHandlerService {
     fixedDelayString = "${subscription.fixed-delay-ms}",
     initialDelayString = "${subscription.initial-delay-ms}")
   public void listener() {
-    if (!this.subscriptionRepository.existsByConsumerGroupAndAggregateName(subscriptionConfiguration.getConsumerGroup(), EAggregate.BANK_ACCOUNTS.getValue())) {
+    if (!this.subscriptionRepository.checkSubscriptions(subscriptionConfiguration.getConsumerGroup())) {
       SubscriptionEntity entity = new SubscriptionEntity();
       entity.setId(UUID.randomUUID());
       entity.setConsumerGroup(subscriptionConfiguration.getConsumerGroup());
-      entity.setAggregateName(EAggregate.BANK_ACCOUNTS.getValue());
       entity.setOffsetEvent(0);
       this.subscriptionRepository.createSubscription(entity);
     }
