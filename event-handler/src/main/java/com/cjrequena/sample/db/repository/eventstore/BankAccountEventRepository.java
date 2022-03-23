@@ -1,11 +1,9 @@
 package com.cjrequena.sample.db.repository.eventstore;
 
-import com.cjrequena.sample.db.entity.eventstore.BankAccountCratedEventEntity;
 import com.cjrequena.sample.db.entity.eventstore.EventEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.data.repository.query.QueryByExampleExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

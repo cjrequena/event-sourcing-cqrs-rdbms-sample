@@ -117,7 +117,6 @@ logging.level: # Log levels severity mapping. For instance, `logging.level.org.s
   org.hibernate.type.descriptor.sql.BasicBinder: ERROR
   org.flywaydb: INFO
 
-
 # H2
 #spring.datasource.h2.url: jdbc:h2:mem:testdb;MODE=PostgreSQL
 #spring.datasource.h2.driverClassName: org.h2.Driver
@@ -152,17 +151,6 @@ spring.jpa.properties.hibernate.hibernate.dialect: true
 spring.jpa.properties.hibernate.id.new_generator_mappings: false
 spring.jpa.properties.hibernate.search.autoregister_listeners: false
 spring.jpa.properties.hibernate.bytecode.use_reflection_optimizer: false
-
-# swagger configuration
-springdoc:
-  api-docs:
-    groups:
-      enabled: true
-  swagger-ui:
-    path: /swagger-ui.html
-    display-request-duration: true
-    groups-order: DESC
-  version: '@springdoc.version@'
 
 #
 spring.cloud:
