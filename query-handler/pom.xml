@@ -11,7 +11,7 @@
     </parent>
     <properties>
         <!-- -->
-        <start-class>com.cjrequena.sample.CommandHandlerMainApplication</start-class>
+        <start-class>com.cjrequena.sample.QueryHandlerMainApplication</start-class>
     </properties>
     <dependencies>
         <!-- Spring Boot -->
