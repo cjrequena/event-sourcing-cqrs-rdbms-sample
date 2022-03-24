@@ -14,7 +14,9 @@ import com.cjrequena.sample.exception.service.BankAccountServiceException;
 import com.cjrequena.sample.exception.service.DuplicatedAggregateServiceException;
 import com.cjrequena.sample.exception.service.OptimisticConcurrencyServiceException;
 import com.cjrequena.sample.mapper.BankAccountMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Base64;
 import java.util.List;
 
 /**
@@ -41,6 +44,7 @@ public class BankAccountCommandService {
   private final ApplicationEventPublisher applicationEventPublisher;
   private final BankAccountEventStoreService bankAccountEventStoreService;
   private final BankAccountMapper bankAccountMapper;
+  private  final ObjectMapper objectMapper;
 
   @Transactional
   public void handler(Command command)
@@ -87,24 +91,32 @@ public class BankAccountCommandService {
   }
 
   @Transactional
+  @SneakyThrows
   public void process(CreateBankAccountCommand command)
     throws OptimisticConcurrencyServiceException, DuplicatedAggregateServiceException, AggregateNotFoundServiceException {
     BankAccountCratedEvent event = this.bankAccountMapper.toEvent(command);
+    String dataBase64 = Base64.getEncoder().encodeToString(objectMapper.writeValueAsBytes(event));
+    event.setDataBase64(dataBase64);
     bankAccountEventStoreService.appendEvent(event);
   }
 
   @Transactional
+  @SneakyThrows
   public void process(DepositBankAccountCommand command)
     throws OptimisticConcurrencyServiceException, DuplicatedAggregateServiceException, AggregateNotFoundServiceException {
-
     BankAccountDepositedEvent event = this.bankAccountMapper.toEvent(command);
+    String dataBase64 = Base64.getEncoder().encodeToString(objectMapper.writeValueAsBytes(event));
+    event.setDataBase64(dataBase64);
     bankAccountEventStoreService.appendEvent(event);
   }
 
   @Transactional
+  @SneakyThrows
   public void process(WithdrawBankAccountCommand command)
     throws OptimisticConcurrencyServiceException, DuplicatedAggregateServiceException, AggregateNotFoundServiceException {
     BankAccountWithdrawnEvent event = this.bankAccountMapper.toEvent(command);
+    String dataBase64 = Base64.getEncoder().encodeToString(objectMapper.writeValueAsBytes(event));
+    event.setDataBase64(dataBase64);
     bankAccountEventStoreService.appendEvent(event);
   }
 }

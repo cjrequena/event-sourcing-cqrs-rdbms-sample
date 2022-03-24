@@ -11,6 +11,7 @@ import com.cjrequena.sample.event.BankAccountDepositedEvent;
 import com.cjrequena.sample.event.BankAccountWithdrawnEvent;
 import com.cjrequena.sample.event.Event;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
 
 @Mapper(
@@ -32,10 +33,28 @@ public interface BankAccountMapper {
     return null;
   }
 
+  @Mapping(target = "id", source = "data.id")
+  @Mapping(target = "aggregateId", source = "data.aggregateId")
+  @Mapping(target = "version", source = "data.version")
+  @Mapping(target = "dataContentType", source = "data.dataContentType")
+  @Mapping(target = "source", source = "data.source")
+  @Mapping(target = "data", source = "data.data")
   BankAccountCratedEvent toEvent(BankAccountCratedEventEntity entity);
 
+  @Mapping(target = "id", source = "data.id")
+  @Mapping(target = "aggregateId", source = "data.aggregateId")
+  @Mapping(target = "version", source = "data.version")
+  @Mapping(target = "dataContentType", source = "data.dataContentType")
+  @Mapping(target = "source", source = "data.source")
+  @Mapping(target = "data", source = "data.data")
   BankAccountDepositedEvent toEvent(BankAccountDepositedEventEntity entity);
 
+  @Mapping(target = "id", source = "data.id")
+  @Mapping(target = "aggregateId", source = "data.aggregateId")
+  @Mapping(target = "version", source = "data.version")
+  @Mapping(target = "dataContentType", source = "data.dataContentType")
+  @Mapping(target = "source", source = "data.source")
+  @Mapping(target = "data", source = "data.data")
   BankAccountWithdrawnEvent toEvent(BankAccountWithdrawnEventEntity entity);
 
   BankAccountEntity toEntity(BankAccountDTO dto);

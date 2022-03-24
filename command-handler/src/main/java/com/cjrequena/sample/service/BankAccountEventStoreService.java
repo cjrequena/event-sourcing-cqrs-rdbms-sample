@@ -45,7 +45,6 @@ public class BankAccountEventStoreService {
     aggregateEntity.setId(event.getAggregateId());
     aggregateEntity.setName(EAggregate.BANK_ACCOUNTS.getValue());
     aggregateEntity.setVersion(event.getVersion());
-    EventEntity eventEntity = this.bankAccountMapper.toEntity(event);
 
     // Append new Event
     switch (event.getType()) {
@@ -63,7 +62,8 @@ public class BankAccountEventStoreService {
         event.setVersion(aggregateEntity.getVersion());
         break;
     }
-    this.bankAccountEventRepository.save(this.bankAccountMapper.toEntity(event));
+    EventEntity eventEntity = this.bankAccountMapper.toEntity(event);
+    this.bankAccountEventRepository.save(eventEntity);
   }
 
   @Transactional(readOnly = true)

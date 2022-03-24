@@ -15,7 +15,7 @@ public class WithdrawBankAccountDataConverter implements AttributeConverter<With
   private static ObjectMapper objectMapper;
 
   @Autowired
-  public void BankAccountDataConverter(ObjectMapper objectMapper) {
+  public void WithdrawBankAccountDataConverter(ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
   }
 

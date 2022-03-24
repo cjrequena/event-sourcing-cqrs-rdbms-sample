@@ -1,9 +1,8 @@
 package com.cjrequena.sample.db.entity.eventstore;
 
 import com.cjrequena.sample.common.Constants;
-import com.cjrequena.sample.db.converter.WithdrawBankAccountDataConverter;
-import com.cjrequena.sample.dto.WithdrawBankAccountDTO;
-import com.cjrequena.sample.event.ESchemaType;
+import com.cjrequena.sample.db.converter.BankAccountWithdrawnEventConverter;
+import com.cjrequena.sample.event.BankAccountWithdrawnEvent;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -29,24 +28,21 @@ import java.util.UUID;
 public class BankAccountWithdrawnEventEntity extends EventEntity {
 
   // Payload
-  @Convert(converter = WithdrawBankAccountDataConverter.class)
+  @Convert(converter = BankAccountWithdrawnEventConverter.class)
   @Column(name = "data", columnDefinition = "JSON")
-  protected WithdrawBankAccountDTO data;
+  protected BankAccountWithdrawnEvent data;
 
   public BankAccountWithdrawnEventEntity(
     UUID id,
-    String source,
-    String specVersion,
-    String type,
-    String dataContentType,
-    String subject,
-    OffsetDateTime time,
-    String dataBase64,
     UUID aggregateId,
     Long version,
+    String type,
+    String dataContentType,
+    OffsetDateTime time,
+    String dataBase64,
     Integer offset,
-    WithdrawBankAccountDTO data) {
-    super(id, source, specVersion, type, dataContentType, ESchemaType.BANK_ACCOUNT_WITHDRAWN_EVENT_SCHEMA_V1.getValue(), subject, time, dataBase64, aggregateId, version, offset);
+    BankAccountWithdrawnEvent data) {
+    super(id, aggregateId, version, type, dataContentType, time, dataBase64, offset);
     this.data = data;
   }
 

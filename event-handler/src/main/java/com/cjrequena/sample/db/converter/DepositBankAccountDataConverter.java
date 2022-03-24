@@ -15,7 +15,7 @@ public class DepositBankAccountDataConverter implements AttributeConverter<Depos
   private static ObjectMapper objectMapper;
 
   @Autowired
-  public void BankAccountDataConverter(ObjectMapper objectMapper) {
+  public void DepositBankAccountDataConverter(ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
   }
 

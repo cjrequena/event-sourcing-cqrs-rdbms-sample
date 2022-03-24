@@ -15,7 +15,7 @@ public class BankAccountCratedEventConverter implements AttributeConverter<BankA
   private static ObjectMapper objectMapper;
 
   @Autowired
-  public void BankAccountDataConverter(ObjectMapper objectMapper) {
+  public void BankAccountCratedEventConverter(ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
   }
 

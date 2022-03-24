@@ -1,9 +1,8 @@
 package com.cjrequena.sample.db.entity.eventstore;
 
 import com.cjrequena.sample.common.Constants;
-import com.cjrequena.sample.db.converter.BankAccountDataConverter;
-import com.cjrequena.sample.dto.BankAccountDTO;
-import com.cjrequena.sample.event.ESchemaType;
+import com.cjrequena.sample.db.converter.BankAccountCratedEventConverter;
+import com.cjrequena.sample.event.BankAccountCratedEvent;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -27,31 +26,27 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @DiscriminatorValue(value = Constants.BANK_ACCOUNT_CREATED_EVENT_V1)
-public class BankAccountCratedEventEntity extends EventEntity{
+public class BankAccountCratedEventEntity extends EventEntity {
 
   // Payload
-  @Convert(converter = BankAccountDataConverter.class)
+  @Convert(converter = BankAccountCratedEventConverter.class)
   @Column(name = "data", columnDefinition = "JSON")
-  protected BankAccountDTO data;
+  protected BankAccountCratedEvent data;
 
   @Builder
   public BankAccountCratedEventEntity(
     UUID id,
-    String source,
-    String specVersion,
-    String type,
-    String dataContentType,
-    String subject,
-    OffsetDateTime time,
-    String dataBase64,
     UUID aggregateId,
     Long version,
+    String type,
+    String dataContentType,
+    OffsetDateTime time,
+    String dataBase64,
     Integer offset,
-    BankAccountDTO data) {
-    super(id, source, specVersion, type, dataContentType, ESchemaType.BANK_ACCOUNT_CREATED_EVENT_SCHEMA_V1.getValue(), subject, time, dataBase64, aggregateId, version, offset);
+    BankAccountCratedEvent data) {
+    super(id, aggregateId, version, type, dataContentType, time, dataBase64, offset);
     this.data = data;
   }
-
 
   @Override
   public boolean equals(Object o) {

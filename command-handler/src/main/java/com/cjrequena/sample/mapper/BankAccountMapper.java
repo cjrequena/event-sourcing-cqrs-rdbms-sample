@@ -12,6 +12,7 @@ import com.cjrequena.sample.event.BankAccountDepositedEvent;
 import com.cjrequena.sample.event.BankAccountWithdrawnEvent;
 import com.cjrequena.sample.event.Event;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
 
 @Mapper(
@@ -19,6 +20,7 @@ import org.mapstruct.NullValueCheckStrategy;
   nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
 )
 public interface BankAccountMapper {
+
 
   default EventEntity toEntity(Event event) {
     if (event != null) {
@@ -52,21 +54,52 @@ public interface BankAccountMapper {
 
   BankAccountWithdrawnEvent toEvent(WithdrawBankAccountCommand command);
 
-//  @Mapping(source = "id", target = "id")
-//  @Mapping(source = "id", target = "data.id")
-//  @Mapping(source = "source", target = "data.source")
-//  @Mapping(source = "dataContentType", target = "data.dataContentType")
-//  @Mapping(source = "data", target = "data.data")
+  @Mapping(source = "id", target = "data.id")
+  @Mapping(source = "aggregateId", target = "data.aggregateId")
+  @Mapping(source = "version", target = "data.version")
+  @Mapping(source = "dataContentType", target = "data.dataContentType")
+  @Mapping(source = "source", target = "data.source")
+  @Mapping(source = "data", target = "data.data")
   BankAccountCratedEventEntity toEntity(BankAccountCratedEvent event);
 
+  @Mapping(source = "id", target = "data.id")
+  @Mapping(source = "aggregateId", target = "data.aggregateId")
+  @Mapping(source = "version", target = "data.version")
+  @Mapping(source = "dataContentType", target = "data.dataContentType")
+  @Mapping(source = "source", target = "data.source")
+  @Mapping(source = "data", target = "data.data")
   BankAccountDepositedEventEntity toEntity(BankAccountDepositedEvent event);
 
+  @Mapping(source = "id", target = "data.id")
+  @Mapping(source = "aggregateId", target = "data.aggregateId")
+  @Mapping(source = "version", target = "data.version")
+  @Mapping(source = "dataContentType", target = "data.dataContentType")
+  @Mapping(source = "source", target = "data.source")
+  @Mapping(source = "data", target = "data.data")
   BankAccountWithdrawnEventEntity toEntity(BankAccountWithdrawnEvent event);
 
+  @Mapping(target = "id", source = "data.id")
+  @Mapping(target = "aggregateId", source = "data.aggregateId")
+  @Mapping(target = "version", source = "data.version")
+  @Mapping(target = "dataContentType", source = "data.dataContentType")
+  @Mapping(target = "source", source = "data.source")
+  @Mapping(target = "data", source = "data.data")
   BankAccountCratedEvent toEvent(BankAccountCratedEventEntity entity);
 
+  @Mapping(target = "id", source = "data.id")
+  @Mapping(target = "aggregateId", source = "data.aggregateId")
+  @Mapping(target = "version", source = "data.version")
+  @Mapping(target = "dataContentType", source = "data.dataContentType")
+  @Mapping(target = "source", source = "data.source")
+  @Mapping(target = "data", source = "data.data")
   BankAccountDepositedEvent toEvent(BankAccountDepositedEventEntity entity);
 
+  @Mapping(target = "id", source = "data.id")
+  @Mapping(target = "aggregateId", source = "data.aggregateId")
+  @Mapping(target = "version", source = "data.version")
+  @Mapping(target = "dataContentType", source = "data.dataContentType")
+  @Mapping(target = "source", source = "data.source")
+  @Mapping(target = "data", source = "data.data")
   BankAccountWithdrawnEvent toEvent(BankAccountWithdrawnEventEntity entity);
 
 }

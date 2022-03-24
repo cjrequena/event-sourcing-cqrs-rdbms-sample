@@ -1,6 +1,6 @@
 package com.cjrequena.sample.db.converter;
 
-import com.cjrequena.sample.dto.DepositBankAccountDTO;
+import com.cjrequena.sample.event.BankAccountWithdrawnEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,20 +10,19 @@ import javax.persistence.AttributeConverter;
 import java.io.IOException;
 
 @Component
-public class DepositBankAccountDataConverter implements AttributeConverter<DepositBankAccountDTO, String> {
+public class BankAccountWithdrawnEventConverter implements AttributeConverter<BankAccountWithdrawnEvent, String> {
 
   private static ObjectMapper objectMapper;
 
   @Autowired
-  public void DepositBankAccountDataConverter(ObjectMapper objectMapper) {
+  public void BankAccountWithdrawnEventConverter(ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
   }
-
   @Override
-  public String convertToDatabaseColumn(DepositBankAccountDTO dto) {
+  public String convertToDatabaseColumn(BankAccountWithdrawnEvent event) {
     String json = "";
     try {
-      json = objectMapper.writeValueAsString(dto);
+      json = objectMapper.writeValueAsString(event);
     } catch (JsonProcessingException ex) {
       ex.printStackTrace();
     }
@@ -31,13 +30,13 @@ public class DepositBankAccountDataConverter implements AttributeConverter<Depos
   }
 
   @Override
-  public DepositBankAccountDTO convertToEntityAttribute(String data) {
-    DepositBankAccountDTO dto = new DepositBankAccountDTO();
+  public BankAccountWithdrawnEvent convertToEntityAttribute(String data) {
+    BankAccountWithdrawnEvent event = new BankAccountWithdrawnEvent();
     try {
-      dto = objectMapper.readValue(data, DepositBankAccountDTO.class);
+      event = objectMapper.readValue(data, BankAccountWithdrawnEvent.class);
     } catch (IOException ex) {
       ex.printStackTrace();
     }
-    return dto;
+    return event;
   }
 }
