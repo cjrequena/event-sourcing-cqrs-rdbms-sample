@@ -117,13 +117,6 @@ logging.level: # Log levels severity mapping. For instance, `logging.level.org.s
   org.hibernate.type.descriptor.sql.BasicBinder: ERROR
   org.flywaydb: INFO
 
-
-# H2
-#spring.datasource.h2.url: jdbc:h2:mem:testdb;MODE=PostgreSQL
-#spring.datasource.h2.driverClassName: org.h2.Driver
-#spring.datasource.h2.username: sa
-#spring.h2.console.enabled: true
-
 # Postgres
 spring.datasource.postgres.type: com.zaxxer.hikari.HikariDataSource
 spring.datasource.postgres.jdbcUrl: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/postgres

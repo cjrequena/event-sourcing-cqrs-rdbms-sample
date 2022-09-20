@@ -54,6 +54,10 @@ public class BankAccountCommandService {
     List<Event> events = this.bankAccountEventStoreService.retrieveEventsByAggregateId(command.getAggregateId());
     // Recreate the last aggregate snapshot replaying the whole event history by a specific aggregate id
     BankAccountAggregate bankAccountAggregate = new BankAccountAggregate(command.getAggregateId(), events);
+    //
+    if(!command.getType().equals(ECommandType.CREATE_BANK_ACCOUNT_COMMAND) && bankAccountAggregate.getBankAccountDTO()==null){
+      throw new AggregateNotFoundServiceException("Bank account with id " + bankAccountAggregate.getId() + " not found");
+    }
     this.process(command, bankAccountAggregate);
   }
 
@@ -83,7 +87,7 @@ public class BankAccountCommandService {
       if (data.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
         throw new BankAccountServiceException("Amount must be greater than 0");
       }
-      if(bankAccountDTO.getBalance().subtract(data.getAmount()).compareTo(BigDecimal.ZERO)<=0){
+      if(bankAccountDTO.getBalance().subtract(data.getAmount()).compareTo(BigDecimal.ZERO)<0){
         throw new BankAccountServiceException("Insufficient balance");
       }
       this.process(withdrawBankAccountCommand);
