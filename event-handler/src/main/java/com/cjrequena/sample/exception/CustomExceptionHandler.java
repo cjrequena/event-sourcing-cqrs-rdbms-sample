@@ -5,12 +5,11 @@ import com.cjrequena.sample.exception.service.ServiceException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ServerWebInputException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
@@ -23,9 +22,9 @@ import java.time.format.DateTimeFormatter;
  * @author cjrequena
  */
 @SuppressWarnings("unchecked")
-@ControllerAdvice
+@RestControllerAdvice
 @Log4j2
-public class DefaultResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+public class CustomExceptionHandler {
 
   public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";
   private static final String EXCEPTION_LOG = "Exception {}";
@@ -58,7 +57,7 @@ public class DefaultResponseEntityExceptionHandler extends ResponseEntityExcepti
 
   @ExceptionHandler({ControllerException.class})
   @ResponseBody
-  public ResponseEntity<Object> handleApiException(ControllerException ex) {
+  public ResponseEntity<Object> handleControllerException(ControllerException ex) {
     if (ex.getHttpStatus().is5xxServerError()) {
       log.error(EXCEPTION_LOG, ex.getMessage(), ex);
     } else {

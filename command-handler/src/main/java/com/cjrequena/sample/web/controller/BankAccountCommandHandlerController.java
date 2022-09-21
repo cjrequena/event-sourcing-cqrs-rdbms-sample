@@ -28,11 +28,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import static com.cjrequena.sample.common.Constants.VND_SAMPLE_SERVICE_V1;
@@ -89,7 +89,7 @@ public class BankAccountCommandHandlerController {
     path = "/bank-accounts",
     produces = {APPLICATION_JSON_VALUE}
   )
-  public ResponseEntity<Void> create(@Parameter @Valid @RequestBody BankAccountDTO dto, BindingResult bindingResult, HttpServletRequest request, UriComponentsBuilder ucBuilder)
+  public ResponseEntity<Void> create(@Parameter @Valid @RequestBody BankAccountDTO dto, ServerHttpRequest request)
     throws NotFoundControllerException, BadRequestControllerException, ConflictControllerException {
     try {
       CreateBankAccountCommand createBankAccountCommand = CreateBankAccountCommand.builder().bankAccountDTO(dto).build();
@@ -146,7 +146,7 @@ public class BankAccountCommandHandlerController {
     }
   )
   @PostMapping(path = "/bank-accounts/deposit", produces = {APPLICATION_JSON_VALUE})
-  public ResponseEntity<Void> deposit(@RequestBody DepositBankAccountDTO dto, @RequestHeader("aggregate-version") Long version, HttpServletRequest request, BindingResult bindingResult, UriComponentsBuilder ucBuilder)
+  public ResponseEntity<Void> deposit(@RequestBody DepositBankAccountDTO dto, @RequestHeader("aggregate-version") Long version, ServerHttpRequest request)
     throws NotFoundControllerException, BadRequestControllerException, ConflictControllerException {
     try {
       DepositBankAccountCommand command = DepositBankAccountCommand.builder().depositBankAccountDTO(dto).version(version).build();
@@ -187,7 +187,7 @@ public class BankAccountCommandHandlerController {
     }
   )
   @PostMapping(path = "/bank-accounts/withdraw", produces = {APPLICATION_JSON_VALUE})
-  public ResponseEntity<Void> withdraw(@RequestBody WithdrawBankAccountDTO dto, @RequestHeader("aggregate-version") Long version, HttpServletRequest request, BindingResult bindingResult,UriComponentsBuilder ucBuilder)
+  public ResponseEntity<Void> withdraw(@RequestBody WithdrawBankAccountDTO dto, @RequestHeader("aggregate-version") Long version, ServerHttpRequest request)
     throws NotFoundControllerException, BadRequestControllerException, ConflictControllerException {
     try {
       WithdrawBankAccountCommand command = WithdrawBankAccountCommand.builder().withdrawBankAccountDTO(dto).version(version).build();

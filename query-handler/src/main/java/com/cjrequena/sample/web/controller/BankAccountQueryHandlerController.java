@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.cjrequena.sample.common.Constants.VND_SAMPLE_SERVICE_V1;
+import static org.springframework.http.HttpHeaders.CACHE_CONTROL;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 /**
@@ -61,9 +62,12 @@ public class BankAccountQueryHandlerController {
     }
   )
   @GetMapping(path = "/bank-accounts/{accountId}", produces = {APPLICATION_JSON_VALUE})
-  public BankAccountDTO retrieveById(@PathVariable("accountId") UUID accountId) throws NotFoundControllerException {
+  public ResponseEntity<BankAccountDTO> retrieveById(@PathVariable("accountId") UUID accountId) throws NotFoundControllerException {
     try {
-      return this.bankAccountQueryService.retrieveById(accountId);
+      BankAccountDTO bankAccountDTO = this.bankAccountQueryService.retrieveById(accountId);
+      HttpHeaders responseHeaders = new HttpHeaders();
+      responseHeaders.set(CACHE_CONTROL, "no store, private, max-age=0");
+      return new ResponseEntity<>(bankAccountDTO, responseHeaders, HttpStatus.OK);
     } catch (BankAccountNotFoundServiceException ex) {
       throw new NotFoundControllerException();
     }

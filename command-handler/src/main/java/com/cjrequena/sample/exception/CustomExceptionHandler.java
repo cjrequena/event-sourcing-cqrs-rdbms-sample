@@ -54,7 +54,7 @@ public class CustomExceptionHandler  {
 
   @ExceptionHandler({ControllerException.class})
   @ResponseBody
-  public ResponseEntity<Object> handleApiException(ControllerException ex) {
+  public ResponseEntity<Object> handleControllerException(ControllerException ex) {
     if (ex.getHttpStatus().is5xxServerError()) {
       log.error(EXCEPTION_LOG, ex.getMessage(), ex);
     } else {
